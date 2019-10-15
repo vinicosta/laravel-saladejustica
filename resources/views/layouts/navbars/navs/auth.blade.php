@@ -12,6 +12,7 @@
             <span class="navbar-toggler-icon icon-bar"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end">
+            @if ($showSearch)
             <form class="navbar-form">
                 <div class="input-group no-border">
                     <input type="text" value="" class="form-control" placeholder="Pesquisar…" style="color: white">
@@ -21,6 +22,7 @@
                     </button>
                 </div>
             </form>
+            @endif
             <ul class="navbar-nav">
                 {{--<li class="nav-item">
                     <a class="nav-link" href="{{ route('home') }}">

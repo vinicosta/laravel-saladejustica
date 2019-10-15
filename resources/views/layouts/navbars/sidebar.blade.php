@@ -6,7 +6,7 @@ data-image="{{ asset('material') }}/img/sidebar-1.jpg" --}}
       Tip 2: you can also add an image using data-image tag
   -->
     <div class="logo">
-        <a href="https://creative-tim.com/" class="simple-text logo-normal">
+        <a href="{{ route('home') }}" class="simple-text logo-normal">
             <i><img style="width:25px; border: 1px solid #93a1a1" src="{{ asset('material') }}/img/saladejustica.png"></i>
             {{ __(config('app.name')) }}
         </a>
