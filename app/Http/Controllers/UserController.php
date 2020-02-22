@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
+use DB;
 
 class UserController extends Controller
 {
@@ -82,5 +84,23 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('user.index')->withStatus(__('Usuário excluído com sucesso.'));
+    }
+
+    public function searchResult(){
+        return view('user.search');
+    }
+
+    public function search(Request $request, User $model){
+        if($request->search == ''){
+            return view('users.grid', ['users' => $model->paginate(15)]);
+        }
+
+        $users = DB::table('users')
+            ->where('name', 'LIKE', '%' . str_replace(' ', '%', trim($request->search)) . '%')
+            ->orWhere('email', 'LIKE', '%' . str_replace(' ', '%', trim($request->search)) . '%')
+            ->orderBy('name')
+            ->get();
+
+        return view('users.grid', compact('users'));
     }
 }

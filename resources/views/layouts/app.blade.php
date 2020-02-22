@@ -19,6 +19,7 @@
     <link href="{{ asset('material') }}/css/material-dashboard.css?v=2.1.1" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="{{ asset('material') }}/demo/demo.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 </head>
 
 <body class="{{ $class ?? '' }}">
@@ -66,7 +67,7 @@
     <!-- Library for adding dinamically elements -->
     <script src="{{ asset('material') }}/js/plugins/arrive.min.js"></script>
     <!--  Google Maps Plugin    -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE'"></script>
+    {{-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE'"></script> --}}
     <!-- Chartist JS -->
     <script src="{{ asset('material') }}/js/plugins/chartist.min.js"></script>
     <!--  Notifications Plugin    -->
