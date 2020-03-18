@@ -19,19 +19,34 @@ data-image="{{ asset('material') }}/img/sidebar-1.jpg" --}}
                     <p>{{ __('Dashboard') }}</p>
                 </a>
             </li>
-            <li class="nav-item {{ ($activePage == 'profile' || $activePage == 'user-management') ? ' active' : '' }}">
-                <a class="nav-link" data-toggle="collapse" href="#cadastros" aria-expanded="true">
+            @php
+                $basicsActive = ($activePage == 'user-management' || $activePage == 'genre-management'|| $activePage == 'subgenre-management') ? true : false
+            @endphp
+            <li class="nav-item {{ $basicsActive ? 'active' : '' }}">
+                <a class="nav-link" data-toggle="collapse" href="#basics" aria-expanded="{{ $basicsActive ? 'true' : 'false' }}">
                     <i class="material-icons">table_chart</i>
                     <p>{{ __('Cadastros') }}
                         <b class="caret"></b>
                     </p>
                 </a>
-                <div class="collapse show" id="cadastros">
+                <div class="collapse {{ $basicsActive ? 'show' : '' }}" id="basics">
                     <ul class="nav">
-                        <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
+                        <li class="nav-item {{ $basicsActive ? 'active' : '' }}">
                             <a class="nav-link" href="{{ route('user.index') }}">
                                 <i class="material-icons">person</i>
                                 <span class="sidebar-normal"> {{ __('Usuários') }} </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{ $basicsActive ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('genre.index') }}">
+                                <i class="material-icons">style</i>
+                                <span class="sidebar-normal"> {{ __('Gêneros') }} </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{ $basicsActive ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('subgenre.index') }}">
+                                <i class="material-icons">account_tree</i>
+                                <span class="sidebar-normal"> {{ __('Subgêneros') }} </span>
                             </a>
                         </li>
                     </ul>

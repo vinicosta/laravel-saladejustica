@@ -17,9 +17,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
     <!-- CSS Files -->
     <link href="{{ asset('material') }}/css/material-dashboard.css?v=2.1.1" rel="stylesheet" />
+    <link href="{{ asset('material') }}/css/jquery-ui.css" rel="stylesheet" />
+    <link href="{{ asset('material') }}/css/jquery-ui.theme.css" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link href="{{ asset('material') }}/demo/demo.css" rel="stylesheet" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    {{-- <link href="{{ asset('material') }}/demo/demo.css" rel="stylesheet" /> --}}
 </head>
 
 <body class="{{ $class ?? '' }}">
@@ -35,6 +36,7 @@
 
     <!--   Core JS Files   -->
     <script src="{{ asset('material') }}/js/core/jquery.min.js"></script>
+    <script src="{{ asset('material') }}/js/core/jquery-ui.min.js"></script>
     <script src="{{ asset('material') }}/js/core/popper.min.js"></script>
     <script src="{{ asset('material') }}/js/core/bootstrap-material-design.min.js"></script>
     <script src="{{ asset('material') }}/js/plugins/perfect-scrollbar.jquery.min.js"></script>

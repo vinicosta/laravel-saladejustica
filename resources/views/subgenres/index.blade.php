@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'user-management', 'titlePage' => __('Usuários'), 'showSearch' => true])
+@extends('layouts.app', ['activePage' => 'subgenre-management', 'titlePage' => __('Subgêneros'), 'showSearch' => true])
 
 @section('content')
 <div class="content">
@@ -7,8 +7,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">{{ __('Usuários') }}</h4>
-                        <p class="card-category"> {{ __('Cadastro de usuários do sistema') }}</p>
+                        <h4 class="card-title ">{{ __('Subgêneros') }}</h4>
+                        <p class="card-category"> {{ __('Cadastro de subgêneros literários') }}</p>
                     </div>
                     <div class="card-body">
                         @if (session('status'))
@@ -25,7 +25,7 @@
                         @endif
                         <div class="row">
                             <div class="col-12 text-right">
-                                <a href="{{ route('user.create') }}"
+                                <a href="{{ route('subgenre.create') }}"
                                     class="btn btn-sm btn-primary">{{ __('Adicionar') }}</a>
                             </div>
                         </div>
@@ -36,17 +36,14 @@
                                         {{ __('Nome') }}
                                     </th>
                                     <th>
-                                        {{ __('E-mail') }}
-                                    </th>
-                                    <th>
-                                        {{ __('Data de criação') }}
+                                        {{ __('Gênero') }}
                                     </th>
                                     <th class="text-right">
                                         {{ __('Ações') }}
                                     </th>
                                 </thead>
                                 <tbody>
-                                    @include('users.grid', ['users' => $users])
+                                    @include('subgenres.grid', ['subgenres' => $subgenres])
                                 </tbody>
                             </table>
                         </div>
@@ -63,7 +60,7 @@
         $value = $(this).val();
         $.ajax({
             type: 'get',
-            url: "{{ URL::to('user/search') }}",
+            url: "{{ URL::to('subgenre/search') }}",
             data: { 'search':$value },
             success: function(data){
                 $('tbody').html(data);

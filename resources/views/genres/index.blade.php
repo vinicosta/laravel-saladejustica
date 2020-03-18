@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'user-management', 'titlePage' => __('Usuários'), 'showSearch' => true])
+@extends('layouts.app', ['activePage' => 'genre-management', 'titlePage' => __('Gêneros'), 'showSearch' => true])
 
 @section('content')
 <div class="content">
@@ -7,8 +7,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">{{ __('Usuários') }}</h4>
-                        <p class="card-category"> {{ __('Cadastro de usuários do sistema') }}</p>
+                        <h4 class="card-title ">{{ __('Gêneros') }}</h4>
+                        <p class="card-category"> {{ __('Cadastro de gêneros literários') }}</p>
                     </div>
                     <div class="card-body">
                         @if (session('status'))
@@ -25,7 +25,7 @@
                         @endif
                         <div class="row">
                             <div class="col-12 text-right">
-                                <a href="{{ route('user.create') }}"
+                                <a href="{{ route('genre.create') }}"
                                     class="btn btn-sm btn-primary">{{ __('Adicionar') }}</a>
                             </div>
                         </div>
@@ -35,18 +35,12 @@
                                     <th>
                                         {{ __('Nome') }}
                                     </th>
-                                    <th>
-                                        {{ __('E-mail') }}
-                                    </th>
-                                    <th>
-                                        {{ __('Data de criação') }}
-                                    </th>
                                     <th class="text-right">
                                         {{ __('Ações') }}
                                     </th>
                                 </thead>
                                 <tbody>
-                                    @include('users.grid', ['users' => $users])
+                                    @include('genres.grid', ['genres' => $genres])
                                 </tbody>
                             </table>
                         </div>
@@ -63,8 +57,8 @@
         $value = $(this).val();
         $.ajax({
             type: 'get',
-            url: "{{ URL::to('user/search') }}",
-            data: { 'search':$value },
+            url: "{{ URL::to('genre/search/return/view/') }}",
+            data: { 'term':$value },
             success: function(data){
                 $('tbody').html(data);
             }

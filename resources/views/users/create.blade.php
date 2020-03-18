@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'user-management', 'titlePage' => __('Gestāo de Usuários')])
+@extends('layouts.app', ['activePage' => 'user-management', 'titlePage' => __('Gestāo de Usuários'), 'showSearch' => false])
 
 @section('content')
 <div class="content">
@@ -22,7 +22,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">{{ __('Nome') }}</label>
+                                <label class="col-sm-2 col-form-label" for="input-name">{{ __('Nome') }}</label>
                                 <div class="col-sm-7">
                                     <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-2 col-form-label">{{ __('E-mail') }}</label>
+                                <label class="col-sm-2 col-form-label" for="input-email">{{ __('E-mail') }}</label>
                                 <div class="col-sm-7">
                                     <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
@@ -86,3 +86,8 @@
     </div>
 </div>
 @endsection
+@push('js')
+<script type="text/javascript">
+    $('#input-name').focus();
+</script>
+@endpush

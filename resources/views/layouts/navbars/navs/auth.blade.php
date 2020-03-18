@@ -12,6 +12,7 @@
             <span class="navbar-toggler-icon icon-bar"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end">
+            @if ($showSearch)
             <form class="navbar-form">
                 <div class="input-group no-border">
                     <input type="text" value="" id="search" class="form-control" placeholder="Pesquisar…" style="color: white">
@@ -21,6 +22,7 @@
                     </button>
                 </div>
             </form>
+            @endif
             <ul class="navbar-nav">
                 {{--<li class="nav-item">
                     <a class="nav-link" href="{{ route('home') }}">
@@ -48,9 +50,13 @@
                     </div>
                 </li> --}}
                 <li class="nav-item dropdown">
-                    <a class="nav-link" href="#pablo" id="navbarDropdownProfile" data-toggle="dropdown"
+                    <a class="nav-link" href="#" id="navbarDropdownProfile" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        <i class="material-icons">person</i>
+                        {{-- <i class="material-icons">person</i> --}}
+                        @php
+                            $grav_url = "https://www.gravatar.com/avatar/" . md5(Auth::user()->email) . "?d=&s=40";
+                        @endphp
+                        <img src="{{ $grav_url }}" alt="" style="border-radius: 50%;" />
                         <p class="d-lg-none d-md-block">
                             {{ __('Account') }}
                         </p>

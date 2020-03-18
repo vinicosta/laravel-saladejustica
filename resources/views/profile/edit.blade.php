@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'profile', 'titlePage' => __('Perfil do Usuário')])
+@extends('layouts.app', ['activePage' => 'profile', 'titlePage' => __('Perfil do Usuário'), 'showSearch' => false])
 
 @section('content')
 <div class="content">

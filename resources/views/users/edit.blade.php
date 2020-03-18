@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'user-management', 'titlePage' => __('Usuário')])
+@extends('layouts.app', ['activePage' => 'user-management', 'titlePage' => __('Usuário'), 'showSearch' => false])
 
 @section('content')
 <div class="content">
@@ -88,3 +88,8 @@
     </div>
 </div>
 @endsection
+@push('js')
+<script type="text/javascript">
+    $('#input-name').focus();
+</script>
+@endpush
