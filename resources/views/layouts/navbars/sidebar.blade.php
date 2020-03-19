@@ -20,7 +20,7 @@ data-image="{{ asset('material') }}/img/sidebar-1.jpg" --}}
                 </a>
             </li>
             @php
-                $basicsActive = ($activePage == 'user-management' || $activePage == 'genre-management'|| $activePage == 'subgenre-management') ? true : false
+                $basicsActive = ($activePage == 'user-management' || $activePage == 'genre-management' || $activePage == 'subgenre-management' || $activePage == 'author-management' || $activePage == 'publisher-management') ? true : false
             @endphp
             <li class="nav-item {{ $basicsActive ? 'active' : '' }}">
                 <a class="nav-link" data-toggle="collapse" href="#basics" aria-expanded="{{ $basicsActive ? 'true' : 'false' }}">
@@ -47,6 +47,18 @@ data-image="{{ asset('material') }}/img/sidebar-1.jpg" --}}
                             <a class="nav-link" href="{{ route('subgenre.index') }}">
                                 <i class="material-icons">account_tree</i>
                                 <span class="sidebar-normal"> {{ __('Subgêneros') }} </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{ $basicsActive ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('author.index') }}">
+                                <i class="material-icons">recent_actors</i>
+                                <span class="sidebar-normal"> {{ __('Autores') }} </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{ $basicsActive ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ route('publisher.index') }}">
+                                <i class="material-icons">business</i>
+                                <span class="sidebar-normal"> {{ __('Editoras') }} </span>
                             </a>
                         </li>
                     </ul>

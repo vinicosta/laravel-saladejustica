@@ -61,6 +61,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('subgenre', 'SubgenreController', ['except' => ['show']]);
     Route::get('subgenre/search', 'SubgenreController@search');
+
+    Route::resource('author', 'AuthorController', ['except' => ['show']]);
+    Route::get('author/search/return/{type}', 'AuthorController@search');
+
+    Route::resource('publisher', 'PublisherController', ['except' => ['show']]);
+    Route::get('publisher/search/return/{type}', 'PublisherController@search');
 });
 
 
