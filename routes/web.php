@@ -67,6 +67,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('publisher', 'PublisherController', ['except' => ['show']]);
     Route::get('publisher/search/return/{type}', 'PublisherController@search');
+
+    Route::resource('size', 'SizeController', ['except' => ['show']]);
+    Route::get('size/search/return/{type}', 'SizeController@search');
 });
 
 
