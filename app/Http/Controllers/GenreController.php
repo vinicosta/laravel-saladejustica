@@ -87,25 +87,34 @@ class GenreController extends Controller
         return view('genre.search');
     }
 
-    public function search(Request $request, Genre $model, $return){
+    public function search(Request $request, Genre $model, string $return){
         if($request->term == ''){
             $genres = $model->paginate(15);
         }
 
-        $genres = $model->where('name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
+        $genres = $model
+            ->where('name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
             ->orderBy('name')
             ->get();
 
-        if($return == 'json'){
-            $response = array();
+        switch ($return) {
+            case 'json':
+                $response = array();
 
-            foreach($genres as $genre){
-                $response[] = array("id" => $genre->id, "label" => $genre->name);
-            }
+                foreach($genres as $genre){
+                    $response[] = array("id" => $genre->id, "label" => $genre->name);
+                }
 
-            return \Response::json($response);
+                return \Response::json($response);
+                break;
+
+            case 'index':
+                return view('genres.index', ['genres' => $genres, 'search' => $request->term]);
+                break;
+
+            default:
+                return view('genres.grid', compact('genres'));
+                break;
         }
-
-        return view('genres.grid', compact('genres'));
     }
 }

@@ -83,11 +83,13 @@ class AuthorController extends Controller
         return redirect()->route('author.index')->withStatus(__('Autor excluído com sucesso.'));
     }
 
-    public function searchResult(){
+    public function searchResult()
+    {
         return view('author.search');
     }
 
-    public function search(Request $request, Author $model, string $return){
+    public function search(Request $request, Author $model, string $return)
+    {
         if($request->term == ''){
             $authors = $model->paginate(15);
         }
@@ -96,16 +98,25 @@ class AuthorController extends Controller
             ->orderBy('name')
             ->get();
 
-        if($return == 'json'){
-            $response = array();
+        switch ($return) {
+            case 'json':
+                $response = array();
 
-            foreach($authors as $author){
-                $response[] = array("id" => $author->id, "label" => $author->name);
-            }
+                foreach($authors as $author){
+                    $response[] = array("id" => $author->id, "label" => $author->name);
+                }
 
-            return \Response::json($response);
+                return \Response::json($response);
+                break;
+
+            case 'index':
+                return view('authors.index', ['authors' => $authors, 'search' => $request->term]);
+                break;
+
+            default:
+                return view('authors.grid', compact('authors'));
+                break;
         }
 
-        return view('authors.grid', compact('authors'));
     }
 }

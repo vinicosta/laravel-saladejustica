@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'author-management', 'titlePage' => __('Autores'), 'showSearch' => true])
+@extends('layouts.app', ['activePage' => 'author-management', 'titlePage' => __('Autores'), 'showSearch' => true, 'model' => 'author'])
 
 @section('content')
 <div class="content">
@@ -63,7 +63,7 @@
                 $('tbody').html(data);
             }
         });
-    })
+    });
 
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 </script>

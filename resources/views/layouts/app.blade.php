@@ -19,8 +19,6 @@
     <link href="{{ asset('material') }}/css/material-dashboard.css?v=2.1.1" rel="stylesheet" />
     <link href="{{ asset('material') }}/css/jquery-ui.css" rel="stylesheet" />
     <link href="{{ asset('material') }}/css/jquery-ui.theme.css" rel="stylesheet" />
-    <!-- CSS Just for demo purpose, don't include it in your project -->
-    {{-- <link href="{{ asset('material') }}/demo/demo.css" rel="stylesheet" /> --}}
 </head>
 
 <body class="{{ $class ?? '' }}">

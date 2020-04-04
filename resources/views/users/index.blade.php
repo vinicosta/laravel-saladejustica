@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'user-management', 'titlePage' => __('Usuários'), 'showSearch' => true])
+@extends('layouts.app', ['activePage' => 'user-management', 'titlePage' => __('Usuários'), 'showSearch' => true, 'model' => 'user'])
 
 @section('content')
 <div class="content">
@@ -63,13 +63,13 @@
         $value = $(this).val();
         $.ajax({
             type: 'get',
-            url: "{{ URL::to('user/search') }}",
-            data: { 'search':$value },
-            success: function(data){
+            url: "{{ URL::to('user/search/return/view/') }}",
+            data: { 'term':$value },
+                success: function(data){
                 $('tbody').html(data);
             }
         });
-    })
+    });
 
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 </script>

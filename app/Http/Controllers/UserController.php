@@ -90,17 +90,35 @@ class UserController extends Controller
         return view('user.search');
     }
 
-    public function search(Request $request, User $model){
-        if($request->search == ''){
+    public function search(Request $request, User $model, string $return){
+        if($request->term == ''){
             return view('users.grid', ['users' => $model->paginate(15)]);
         }
 
         $users = DB::table('users')
-            ->where('name', 'LIKE', '%' . str_replace(' ', '%', trim($request->search)) . '%')
-            ->orWhere('email', 'LIKE', '%' . str_replace(' ', '%', trim($request->search)) . '%')
+            ->where('name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
+            ->orWhere('email', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
             ->orderBy('name')
             ->get();
 
-        return view('users.grid', compact('users'));
+        switch ($return) {
+            case 'json':
+                $response = array();
+
+                foreach($users as $user){
+                    $response[] = array("id" => $user->id, "label" => $user->name);
+                }
+
+                return \Response::json($response);
+                break;
+
+            case 'index':
+                return view('users.index', ['users' => $users, 'search' => $request->term]);
+                break;
+
+            default:
+                return view('users.grid', compact('users'));
+                break;
+        }
     }
 }

@@ -100,16 +100,25 @@ class SizeController extends Controller
             ->orderBy('name')
             ->get();
 
-        if($return == 'json'){
-            $response = array();
+        switch ($return) {
+            case 'json':
+                $response = array();
 
-            foreach($sizes as $size){
-                $response[] = array("id" => $size->id, "label" => $size->name);
-            }
+                foreach($sizes as $size){
+                    $response[] = array("id" => $size->id, "label" => $size->name);
+                }
 
-            return \Response::json($response);
+                return \Response::json($response);
+                break;
+
+            case 'index':
+                return view('sizes.index', ['sizes' => $sizes, 'search' => $request->term]);
+                break;
+
+            default:
+                return view('sizes.grid', compact('sizes'));
+                break;
         }
 
-        return view('sizes.grid', compact('sizes'));
     }
 }

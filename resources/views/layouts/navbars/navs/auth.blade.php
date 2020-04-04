@@ -13,9 +13,11 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end">
             @if ($showSearch)
-            <form class="navbar-form">
+            <form method="get" class="navbar-form" action="{{ URL::to($model . '/search/return/index') }}">
+                @csrf
+                @method('get')
                 <div class="input-group no-border">
-                    <input type="text" value="" id="search" class="form-control" placeholder="Pesquisar…" style="color: white">
+                <input type="text" value="{{ isset($search) ? $search : '' }}" name="term" id="search" class="form-control" placeholder="Pesquisar…" style="color: white">
                     <button type="submit" class="btn btn-white btn-round btn-just-icon">
                         <i class="material-icons">search</i>
                         <div class="ripple-container"></div>

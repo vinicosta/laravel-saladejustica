@@ -51,7 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('user', 'UserController', ['except' => ['show']]);
-    Route::get('user/search', 'UserController@search');
+    Route::get('user/search/return/{type}', 'UserController@search');
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
     Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
@@ -60,7 +60,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('genre/search/return/{type}', 'GenreController@search');
 
     Route::resource('subgenre', 'SubgenreController', ['except' => ['show']]);
-    Route::get('subgenre/search', 'SubgenreController@search');
+    Route::get('subgenre/search/return/{type}', 'SubgenreController@search');
 
     Route::resource('author', 'AuthorController', ['except' => ['show']]);
     Route::get('author/search/return/{type}', 'AuthorController@search');

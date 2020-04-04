@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'size-management', 'titlePage' => __('Tamanhos'), 'showSearch' => true])
+@extends('layouts.app', ['activePage' => 'size-management', 'titlePage' => __('Tamanhos'), 'showSearch' => true, 'model' => 'size'])
 
 @section('content')
 <div class="content">
@@ -66,7 +66,7 @@
                 $('tbody').html(data);
             }
         });
-    })
+    });
 
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 </script>

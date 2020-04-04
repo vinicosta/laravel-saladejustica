@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'genre-management', 'titlePage' => __('Gêneros'), 'showSearch' => true])
+@extends('layouts.app', ['activePage' => 'genre-management', 'titlePage' => __('Gêneros'), 'showSearch' => true, 'model' => 'genre'])
 
 @section('content')
 <div class="content">
@@ -63,7 +63,7 @@
                 $('tbody').html(data);
             }
         });
-    })
+    });
 
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 </script>

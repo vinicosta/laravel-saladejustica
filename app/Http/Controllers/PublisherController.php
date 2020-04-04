@@ -16,7 +16,9 @@ class PublisherController extends Controller
      */
     public function index(Publisher $model)
     {
-        return view('publishers.index', ['publishers' => $model->paginate(15)]);
+        $publishers = $model->paginate(15);
+
+        return view('publishers.index', ['publishers' => $publishers]);
     }
 
     /**
@@ -98,16 +100,25 @@ class PublisherController extends Controller
             ->orderBy('name')
             ->get();
 
-        if($return == 'json'){
-            $response = array();
+        switch ($return) {
+            case 'json':
+                $response = array();
 
-            foreach($publishers as $publisher){
-                $response[] = array("id" => $publisher->id, "label" => $publisher->name);
-            }
+                foreach($publishers as $publisher){
+                    $response[] = array("id" => $publisher->id, "label" => $publisher->name);
+                }
 
-            return \Response::json($response);
+                return \Response::json($response);
+                break;
+
+            case 'index':
+                return view('publishers.index', ['publishers' => $publishers, 'search' => $request->term]);
+                break;
+
+            default:
+                return view('publishers.grid', compact('publishers'));
+                break;
         }
 
-        return view('publishers.grid', compact('publishers'));
     }
 }

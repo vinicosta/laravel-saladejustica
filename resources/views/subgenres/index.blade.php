@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'subgenre-management', 'titlePage' => __('Subgêneros'), 'showSearch' => true])
+@extends('layouts.app', ['activePage' => 'subgenre-management', 'titlePage' => __('Subgêneros'), 'showSearch' => true, 'model' => 'subgenre'])
 
 @section('content')
 <div class="content">
@@ -60,13 +60,13 @@
         $value = $(this).val();
         $.ajax({
             type: 'get',
-            url: "{{ URL::to('subgenre/search') }}",
-            data: { 'search':$value },
+            url: "{{ URL::to('subgenre/search/return/view/') }}",
+            data: { 'term':$value },
             success: function(data){
                 $('tbody').html(data);
             }
         });
-    })
+    });
 
     $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
 </script>
