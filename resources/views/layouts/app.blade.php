@@ -82,10 +82,13 @@
     <script src="{{ asset('material') }}/demo/demo.js"></script>
     <script src="{{ asset('material') }}/js/settings.js"></script>
     <script src="{{ asset('material') }}/js/progress-bar.js"></script>
+    <script src="{{ asset('material') }}/js/search.js"></script>
+    <script src="{{ asset('material') }}/js/autocomplete.js"></script>
     <script>
         $(document).ready(function() {
             hideProgressBar();
         });
+        showProgressBarOnDown('search');
     </script>
     @stack('js')
 </body>

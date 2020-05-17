@@ -67,15 +67,7 @@
 @endsection
 @push('js')
 <script type="text/javascript">
-    $( function() {
-        $("#input-genre_name").autocomplete({
-            source: "{{ URL::to('genre/search/return/json/') }}",
-            select: function(event, ui) {
-                $("#input-genre_name").val(ui.item.label);
-                $("#input-genre_id").val(ui.item.id);
-            }
-        });
-    });
+    autocomplete('input-genre_name', 'input-genre_id', "{{ URL::to('genre/search/return/json/') }}");
 </script>
 @endpush
 

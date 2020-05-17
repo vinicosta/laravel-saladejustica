@@ -1,4 +1,7 @@
-<table class="table">
+@php
+    print_r($issues)
+@endphp
+{{-- <table class="table">
     <thead class=" text-primary">
         <th>
             {{ __('Nome') }}
@@ -39,4 +42,4 @@
         </tr>
 @endforeach
     </tbody>
-</table>
+</table> --}}

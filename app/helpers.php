@@ -37,3 +37,30 @@ if (!function_exists('typeName')) {
         }
     }
 }
+
+if (!function_exists('typeId')) {
+    function typeId($type_name)
+    {
+        switch ($type_name) {
+            case 'comics':
+                return 1;
+                break;
+
+            case 'books':
+                return 2;
+                break;
+
+            case 'magazines':
+                return 3;
+                break;
+
+        }
+    }
+}
+
+if (!function_exists('termToSearch')) {
+    function termToSearch($term)
+    {
+        return '%' . str_replace(' ', '%', trim($term)) . '%';
+    }
+}

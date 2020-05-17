@@ -40,18 +40,6 @@
 @endsection
 @push('js')
 <script type="text/javascript">
-    $('#search').on('keyup', function(){
-        $value = $(this).val();
-        $.ajax({
-            type: 'get',
-            url: "{{ URL::to('issue/comics/search/') }}",
-            data: { 'term':$value },
-            success: function(data){
-                $('.table-responsive').html(data);
-            }
-        });
-    });
-
-    $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+    search('search', "{{ URL::to('issue/comics/search') }}", '.table-responsive');
 </script>
 @endpush

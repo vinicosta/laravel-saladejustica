@@ -11,7 +11,7 @@
                 <form method="POST" action="{{ route('issue.store') }}" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
 
-                    <input type="hidden" name="title_id" value="3">
+                    <input type="hidden" name="title_id" value="0">
                     <input type="hidden" name="type_id" value="1">
                     <input type="hidden" name="genre_id" value="{{ Config::get('constants.genres.comics') }}">
 
@@ -258,49 +258,17 @@
 @endsection
 @push('js')
 <script type="text/javascript">
-    // Search publishers
-    $( function() {
-        $("#input-publisher_name").autocomplete({
-            source: "{{ URL::to('publisher/search/return/json/') }}",
-            select: function(event, ui) {
-                $("#input-publisher_name").val(ui.item.label);
-                $("#input-publisher_id").val(ui.item.id);
-            }
-        });
-    });
+    // Autocomplete publishers
+    autocomplete('input-publisher_name', 'input-publisher_id', "{{ URL::to('publisher/search/return/json/') }}");
 
-    // Search periodicities
-    $( function() {
-        $("#input-periodicity_name").autocomplete({
-            source: "{{ URL::to('periodicity/search/return/json/') }}",
-            select: function(event, ui) {
-                $("#input-periodicity_name").val(ui.item.label);
-                $("#input-periodicity_id").val(ui.item.id);
-            }
-        });
-    });
+    // Autocomplete periodicities
+    autocomplete('input-periodicity_name', 'input-periodicity_id', "{{ URL::to('periodicity/search/return/json/') }}");
 
-    // Search sizes
-    $( function() {
-        $("#input-size_name").autocomplete({
-            source: "{{ URL::to('size/search/return/json/type/1') }}",
-            select: function(event, ui) {
-                $("#input-size_name").val(ui.item.label);
-                $("#input-size_id").val(ui.item.id);
-            }
-        });
-    });
+    // Autocomplete sizes
+    autocomplete('input-size_name', 'input-size_id', "{{ URL::to('size/search/return/json/type/1') }}");
 
-    // Search subgenres
-    $( function() {
-        $("#input-subgenre_name").autocomplete({
-            source: "{{ URL::to('subgenre/search/return/json/' . Config::get('constants.genres.comics')) }}",
-            select: function(event, ui) {
-                $("#input-subgenre_name").val(ui.item.label);
-                $("#input-subgenre_id").val(ui.item.id);
-            }
-        });
-    });
+    // Autocomplete subgenres
+    autocomplete('input-subgenre_name', 'input-subgenre_id', "{{ URL::to('subgenre/search/return/json/' . Config::get('constants.genres.comics')) }}");
 </script>
 @endpush
 

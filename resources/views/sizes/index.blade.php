@@ -56,21 +56,6 @@
 @endsection
 @push('js')
 <script type="text/javascript">
-    $('#search').on('keyup', function(){
-        showProgressBar();
-        $value = $(this).val();
-        $.ajax({
-            type: 'get',
-            url: "{{ URL::to('size/search/return/view/') }}",
-            data: { 'term':$value },
-            success: function(data){
-                $('tbody').html(data);
-            }
-        }).done(function(){
-            hideProgressBar();
-        });
-    });
-
-    $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
+    search('search', "{{ URL::to('size/search/return/view/') }}", 'tbody');
 </script>
 @endpush

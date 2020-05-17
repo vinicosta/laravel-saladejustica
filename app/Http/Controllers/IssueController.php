@@ -64,7 +64,7 @@ class IssueController extends Controller
         $this->createPreviousIssues($request, $model);
 
         // Redirect to show issue
-        return redirect('issue/' . typeName($request->type_id) . '/' . $issue->id);
+        return redirect('issue/' . typeName($request->type_id) . '/show/' . $issue->id);
     }
 
     public function createPreviousIssues(IssueRequest $request, Issue $model)
@@ -192,48 +192,33 @@ class IssueController extends Controller
         return view('subgenre.search');
     }
 
-    public function search(Request $request, Subgenre $model, string $type){
+    public function search(Request $request, Issue $model, string $type){
         if($request->term == ''){
             return null;
         }
 
-        // SELECT tit.name, pub.name,
-        //     (SELECT date_publication FROM issues WHERE title_id = tit.id ORDER BY date_publication DESC LIMIT 1) AS last_issue_date,
-        //     (SELECT COUNT(id) FROM issues WHERE title_id = tit.id) AS issue_count
-        // FROM titles tit
-        // LEFT JOIN publishers pub ON tit.publisher_id = pub.id
-        // WHERE tit.type_id = 1
-        // AND (tit.name LIKE '%o%' OR pub.name LIKE '%o%')
-        // ORDER BY 3 DESC, tit.name ASC
-        // LIMIT 20
+        $term = explode('#', $request->term);
 
-        $subgenres = $model->select('subgenres.*', 'genres.name as genre_name')
-            ->join('genres', 'genres.id', '=', 'subgenres.genre_id')
-            ->where('subgenres.name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
-            ->orWhere('genres.name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
-            ->orderBy('subgenres.name')
-            ->orderBy('genres.name')
-            ->get();
-
-        switch ($return) {
-            case 'json':
-                $response = array();
-
-                foreach($subgenres as $subgenre){
-                    $response[] = array("id" => $subgenre->id, "label" => $subgenre->name);
-                }
-
-                return \Response::json($response);
-                break;
-
-            case 'index':
-                return view('subgenres.index', ['subgenres' => $subgenres, 'search' => $request->term]);
-                break;
-
-            default:
-                return view('subgenres.grid', compact('subgenres'));
-                break;
+        if(array_key_exists(1, $term) and is_numeric($term[1])){
+            $issues = 'teste';
         }
+        else{
+            $issues = DB::select(
+                "SELECT tit.name AS title_name, pub.name AS publisher_name,
+                    (SELECT date_publication FROM issues WHERE title_id = tit.id ORDER BY date_publication DESC LIMIT 1) AS last_issue_date,
+                    (SELECT image FROM issues WHERE title_id = tit.id AND image IS NOT NULL ORDER BY date_publication DESC LIMIT 1) AS last_issue_image,
+                    (SELECT COUNT(id) FROM issues WHERE title_id = tit.id) AS issue_count
+                FROM titles tit
+                LEFT JOIN publishers pub ON tit.publisher_id = pub.id
+                WHERE tit.type_id = ?
+                AND (tit.name LIKE ? OR pub.name LIKE ?)
+                ORDER BY last_issue_date DESC, tit.name ASC
+                LIMIT 20",
+                [typeId($type), termToSearch($request->term), termToSearch($request->term)]
+            );
+        }
+
+        return view('comics.grid', compact('issues'));
     }
 
 }

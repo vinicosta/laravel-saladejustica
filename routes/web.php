@@ -61,6 +61,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('subgenre', 'SubgenreController', ['except' => ['show']]);
     Route::get('subgenre/search/return/{type}/{genre_id}', 'SubgenreController@search');
+    Route::get('subgenre/search/return/{type}', 'SubgenreController@search');
 
     Route::resource('author', 'AuthorController', ['except' => ['show']]);
     Route::get('author/search/return/{type}', 'AuthorController@search');
@@ -76,9 +77,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     //Route::resource('issue', 'IssueController', ['except' => ['index', 'show']]);
     Route::post('issue/store', 'IssueController@store')->name('issue.store');
-    Route::get('issue/{type}/', 'IssueController@index');
+    Route::get('issue/{type}', 'IssueController@index');
     Route::get('issue/{type}/create', 'IssueController@create');
-    Route::get('issue/{type}/{id}', 'IssueController@show');
+    Route::get('issue/{type}/show/{id}', 'IssueController@show');
     Route::get('issue/{type}/search', 'IssueController@search');
 });
 

@@ -13,7 +13,7 @@
         </button>
         <div class="collapse navbar-collapse justify-content-end">
             @if ($showSearch)
-            <form method="get" class="navbar-form" action="{{ URL::to($model . '/search/return/index') }}">
+            <form method="get" class="navbar-form" autocomplete="off" action="{{ URL::to($model . '/search/return/index') }}">
                 @csrf
                 @method('get')
                 <div class="input-group no-border">
