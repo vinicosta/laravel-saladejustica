@@ -104,20 +104,30 @@ class SubgenreController extends Controller
         return view('subgenre.search');
     }
 
-    public function search(Request $request, Subgenre $model, string $return){
+    public function search(Request $request, Subgenre $model, string $return, int $genre_id  = null){
         if($request->term == ''){
             $subgenres = $this->getAll($model);
 
             return view('subgenres.grid', ['subgenres' => $subgenres]);
         }
 
-        $subgenres = $model->select('subgenres.*', 'genres.name as genre_name')
-            ->join('genres', 'genres.id', '=', 'subgenres.genre_id')
-            ->where('subgenres.name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
-            ->orWhere('genres.name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
-            ->orderBy('subgenres.name')
-            ->orderBy('genres.name')
-            ->get();
+        if(!$genre_id){
+            $subgenres = $model->select('subgenres.*', 'genres.name as genre_name')
+                ->join('genres', 'genres.id', '=', 'subgenres.genre_id')
+                ->where('subgenres.name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
+                ->orWhere('genres.name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
+                ->orderBy('subgenres.name')
+                ->orderBy('genres.name')
+                ->get();
+        }
+        else{
+            $subgenres = $model->select('subgenres.*', 'genres.name as genre_name')
+                ->join('genres', 'genres.id', '=', 'subgenres.genre_id')
+                ->where('subgenres.name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
+                ->Where('subgenres.genre_id', '=', $genre_id)
+                ->orderBy('subgenres.name')
+                ->get();
+        }
 
         switch ($return) {
             case 'json':

@@ -70,49 +70,39 @@ data-image="{{ asset('material') }}/img/sidebar-1.jpg" --}}
                     </ul>
                 </div>
             </li>
-            {{--
-            <li class="nav-item{{ $activePage == 'table' ? ' active' : '' }}">
-                <a class="nav-link" href="{{ route('table') }}">
-                    <i class="material-icons">content_paste</i>
-                    <p>{{ __('Table List') }}</p>
-                </a>
-            </li>
-            <li class="nav-item{{ $activePage == 'typography' ? ' active' : '' }}">
-                <a class="nav-link" href="{{ route('typography') }}">
+            @php
+            $collectionActive = ($activePage == 'comics-management' || $activePage == 'books-management' || $activePage == 'magazines-management') ? true : false
+            @endphp
+            <li class="nav-item {{ $collectionActive ? 'active' : '' }}">
+                <a class="nav-link" data-toggle="collapse" href="#collections" aria-expanded="{{ $collectionActive ? 'true' : 'false' }}">
                     <i class="material-icons">library_books</i>
-                    <p>{{ __('Typography') }}</p>
+                    <p>{{ __('Acervo') }}
+                        <b class="caret"></b>
+                    </p>
                 </a>
+                <div class="collapse {{ $collectionActive ? 'show' : '' }}" id="collections">
+                    <ul class="nav">
+                        <li class="nav-item {{ $collectionActive ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ URL::to('issue/comics') }}">
+                                <i class="material-icons">photo_album</i>
+                                <span class="sidebar-normal"> {{ __('Quadrinhos') }} </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{ $collectionActive ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ URL::to('issue/books') }}">
+                                <i class="material-icons">book</i>
+                                <span class="sidebar-normal"> {{ __('Livros') }} </span>
+                            </a>
+                        </li>
+                        <li class="nav-item {{ $collectionActive ? 'active' : '' }}">
+                            <a class="nav-link" href="{{ URL::to('issue/magazines') }}">
+                                <i class="material-icons">menu_book</i>
+                                <span class="sidebar-normal"> {{ __('Revistas') }} </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
-            <li class="nav-item{{ $activePage == 'icons' ? ' active' : '' }}">
-                <a class="nav-link" href="{{ route('icons') }}">
-                    <i class="material-icons">bubble_chart</i>
-                    <p>{{ __('Icons') }}</p>
-                </a>
-            </li>
-            <li class="nav-item{{ $activePage == 'map' ? ' active' : '' }}">
-                <a class="nav-link" href="{{ route('map') }}">
-                    <i class="material-icons">location_ons</i>
-                    <p>{{ __('Maps') }}</p>
-                </a>
-            </li>
-            <li class="nav-item{{ $activePage == 'notifications' ? ' active' : '' }}">
-                <a class="nav-link" href="{{ route('notifications') }}">
-                    <i class="material-icons">notifications</i>
-                    <p>{{ __('Notifications') }}</p>
-                </a>
-            </li>
-            <li class="nav-item{{ $activePage == 'language' ? ' active' : '' }}">
-                <a class="nav-link" href="{{ route('language') }}">
-                    <i class="material-icons">language</i>
-                    <p>{{ __('RTL Support') }}</p>
-                </a>
-            </li>
-            <li class="nav-item active-pro{{ $activePage == 'upgrade' ? ' active' : '' }}">
-                <a class="nav-link" href="{{ route('upgrade') }}">
-                    <i class="material-icons">unarchive</i>
-                    <p>{{ __('Upgrade to PRO') }}</p>
-                </a>
-            </li> --}}
         </ul>
     </div>
 </div>

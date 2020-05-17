@@ -4,7 +4,7 @@
         {{ $size->name }}
     </td>
     <td>
-        @switch($size->id_type)
+        @switch($size->type_id)
             @case(1)
                 Gibis
             @break

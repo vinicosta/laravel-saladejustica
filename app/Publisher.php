@@ -11,4 +11,9 @@ class Publisher extends Model
         'name',
     ];
 
+    public function titles()
+    {
+        return $this->hasMany('App\Title');
+    }
+
 }

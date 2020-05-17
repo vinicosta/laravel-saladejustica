@@ -19,6 +19,7 @@
     <link href="{{ asset('material') }}/css/material-dashboard.css?v=2.1.1" rel="stylesheet" />
     <link href="{{ asset('material') }}/css/jquery-ui.css" rel="stylesheet" />
     <link href="{{ asset('material') }}/css/jquery-ui.theme.css" rel="stylesheet" />
+    <link href="{{ asset('material') }}/css/progress-bar.css" rel="stylesheet" />
 </head>
 
 <body class="{{ $class ?? '' }}">
@@ -26,6 +27,9 @@
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
+    <div class="progress">
+        <div class="indeterminate"></div>
+    </div>
     @include('layouts.page_templates.auth')
     @endauth
     @guest()
@@ -77,6 +81,12 @@
     <!-- Material Dashboard DEMO methods, don't include it in your project! -->
     <script src="{{ asset('material') }}/demo/demo.js"></script>
     <script src="{{ asset('material') }}/js/settings.js"></script>
+    <script src="{{ asset('material') }}/js/progress-bar.js"></script>
+    <script>
+        $(document).ready(function() {
+            hideProgressBar();
+        });
+    </script>
     @stack('js')
 </body>
 

@@ -60,6 +60,7 @@
 @push('js')
 <script type="text/javascript">
     $('#search').on('keyup', function(){
+        showProgressBar();
         $value = $(this).val();
         $.ajax({
             type: 'get',
@@ -68,6 +69,8 @@
                 success: function(data){
                 $('tbody').html(data);
             }
+        }).done(function(){
+            hideProgressBar();
         });
     });
 

@@ -33,9 +33,8 @@ false])
                                 <div class="col-sm-7">
                                     <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
-                                            name="name" id="input-name" type="text" placeholder="{{ __('Nome') }}"
-                                            value="{{ old('name', $size->name) }}" required="true"
-                                            aria-required="true" />
+                                            name="name" id="input-name" type="text" placeholder="{{ __('Informe o nome do tamanho') }}"
+                                            value="{{ old('name', $size->name) }}" required="true" aria-required="true" />
                                         @if ($errors->has('name'))
                                         <span id="name-error" class="error text-danger"
                                             for="input-name">{{ $errors->first('name') }}</span>
@@ -44,20 +43,18 @@ false])
                                 </div>
                             </div>
                             <div class="row">
-                                <label class="col-sm-2 col-form-label" for="input-input-id_type">{{ __('Tipo') }}</label>
+                                <label class="col-sm-2 col-form-label" for="input-input-type_id">{{ __('Tipo') }}</label>
                                 <div class="col-sm-7">
-                                    <div class="form-group {{ $errors->has('id_type') ? ' has-danger' : '' }}">
-                                        <select class="form-control {{ $errors->has('id_type') ? ' is-invalid' : '' }}" data-style="btn btn-link" name="id_type" id="input-id_type" required="true"
-                                        aria-required="true">
+                                    <div class="form-group {{ $errors->has('type_id') ? ' has-danger' : '' }}">
+                                        <select class="form-control {{ $errors->has('type_id') ? ' is-invalid' : '' }}" data-style="btn btn-link" name="type_id" id="input-type_id" required="true" aria-required="true" placeholder="{{ __('Informe o tipo do tamanho') }}">
                                             <option></option>
-                                            <option value="1" {{ $size->id_type == 1 ? 'selected' : '' }}>Gibis</option>
-                                            <option value="2" {{ $size->id_type == 2 ? 'selected' : '' }}>Livros</option>
-                                            <option value="3" {{ $size->id_type == 3 ? 'selected' : '' }}>Revistas</option>
+                                            <option value="1" {{ $size->type_id == 1 ? 'selected' : '' }}>Gibis</option>
+                                            <option value="2" {{ $size->type_id == 2 ? 'selected' : '' }}>Livros</option>
+                                            <option value="3" {{ $size->type_id == 3 ? 'selected' : '' }}>Revistas</option>
                                         </select>
-                                        {{ old('id_type') }}
-                                        @if ($errors->has('id_type'))
-                                        <span id="id_type-error" class="error text-danger"
-                                            for="input-id_type">{{ $errors->first('id_type') }}</span>
+                                        @if ($errors->has('type_id'))
+                                        <span id="type_id-error" class="error text-danger"
+                                            for="input-type_id">{{ $errors->first('type_id') }}</span>
                                         @endif
                                     </div>
                                 </div>

@@ -90,15 +90,24 @@ class SizeController extends Controller
         return view('size.search');
     }
 
-    public function search(Request $request, Size $model, string $return)
+    public function search(Request $request, Size $model, string $return, int $type = null)
     {
         if($request->term == ''){
             $sizes = $model->paginate(15);
         }
 
-        $sizes = $model->where('name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
-            ->orderBy('name')
-            ->get();
+        if(!$type){
+            $sizes = $model->where('name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
+                ->orderBy('name')
+                ->get();
+        }
+        else{
+            $sizes = $model
+                ->where('name', 'LIKE', '%' . str_replace(' ', '%', trim($request->term)) . '%')
+                ->where('type_id', '=', $type)
+                ->orderBy('name')
+                ->get();
+        }
 
         switch ($return) {
             case 'json':

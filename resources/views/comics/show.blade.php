@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'subgenre-management', 'titlePage' => __('Subgêneros'), 'showSearch' => true, 'model' => 'subgenre'])
+@extends('layouts.app', ['activePage' => 'comics-management', 'titlePage' => __('Quadrinhos'), 'showSearch' => true, 'model' => 'issue'])
 
 @section('content')
 <div class="content">
@@ -7,8 +7,8 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header card-header-primary">
-                        <h4 class="card-title ">{{ __('Subgêneros') }}</h4>
-                        <p class="card-category"> {{ __('Cadastro de subgêneros literários') }}</p>
+                        <h4 class="card-title ">{{ __($issue->issue_number != '' ? $issue->name . ' #' . $issue->issue_number : $issue->name) }}</h4>
+                        <p class="card-category"> {{ __('Cadastro de edições de quadrinhos') }}</p>
                     </div>
                     <div class="card-body">
                         @if (session('status'))
@@ -25,11 +25,10 @@
                         @endif
                         <div class="row">
                             <div class="col-12 text-right">
-                                <a href="{{ route('subgenre.create') }}"
-                                    class="btn btn-sm btn-primary">{{ __('Adicionar') }}</a>
+                                <a href="comics/create" class="btn btn-sm btn-primary">{{ __('Adicionar') }}</a>
                             </div>
                         </div>
-                        <div class="table-responsive">
+                        {{-- <div class="table-responsive">
                             <table class="table">
                                 <thead class=" text-primary">
                                     <th>
@@ -43,10 +42,10 @@
                                     </th>
                                 </thead>
                                 <tbody>
-                                    @include('subgenres.grid', ['subgenres' => $subgenres])
+                                    @include('issues.grid', ['issues' => $issues])
                                 </tbody>
                             </table>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -57,17 +56,14 @@
 @push('js')
 <script type="text/javascript">
     $('#search').on('keyup', function(){
-        showProgressBar();
         $value = $(this).val();
         $.ajax({
             type: 'get',
-            url: "{{ URL::to('subgenre/search/return/view/') }}",
+            url: "{{ URL::to('issue/search/return/view/') }}",
             data: { 'term':$value },
             success: function(data){
                 $('tbody').html(data);
             }
-        }).done(function(){
-            hideProgressBar();
         });
     });
 

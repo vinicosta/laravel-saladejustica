@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Size;
+use App\Issue;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SizeRequest extends FormRequest
+class IssueRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,9 +29,9 @@ class SizeRequest extends FormRequest
             'name' => [
                 'required', 'min:3'
             ],
-            'type_id' => [
+            'number_pages' => [
                 'required'
-            ],
+            ]
         ];
     }
 }

@@ -31,7 +31,7 @@
                                 <div class="col-sm-7">
                                     <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
-                                            name="name" id="input-name" type="text" placeholder="{{ __('Nome') }}"
+                                            name="name" id="input-name" type="text" placeholder="{{ __('Informe o nome do gênero literário') }}"
                                             value="{{ old('name', $genre->name) }}" required="true" aria-required="true" />
                                         @if ($errors->has('name'))
                                         <span id="name-error" class="error text-danger"

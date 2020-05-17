@@ -32,7 +32,7 @@
                                 <div class="col-sm-7">
                                     <div class="form-group{{ $errors->has('name') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
-                                            name="name" id="input-name" type="text" placeholder="{{ __('Name') }}"
+                                            name="name" id="input-name" type="text" placeholder="{{ __('Informe o nome do usuário') }}"
                                             value="{{ old('name', auth()->user()->name) }}" required="true"
                                             aria-required="true" />
                                         @if ($errors->has('name'))
@@ -47,7 +47,7 @@
                                 <div class="col-sm-7">
                                     <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                            name="email" id="input-email" type="email" placeholder="{{ __('E-mail') }}"
+                                            name="email" id="input-email" type="email" placeholder="{{ __('Informe o e-mail do usuário') }}"
                                             value="{{ old('email', auth()->user()->email) }}" required />
                                         @if ($errors->has('email'))
                                         <span id="email-error" class="error text-danger"
@@ -96,7 +96,7 @@
                                         <input
                                             class="form-control{{ $errors->has('old_password') ? ' is-invalid' : '' }}"
                                             input type="password" name="old_password" id="input-current-password"
-                                            placeholder="{{ __('Senha atual') }}" value="" required />
+                                            placeholder="{{ __('Informe a senha atual do usuário') }}" value="" required />
                                         @if ($errors->has('old_password'))
                                         <span id="name-error" class="error text-danger"
                                             for="input-name">{{ $errors->first('old_password') }}</span>
@@ -111,7 +111,7 @@
                                     <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
                                             name="password" id="input-password" type="password"
-                                            placeholder="{{ __('Nova senha') }}" value="" required />
+                                            placeholder="{{ __('Informe a nova senha do usuário') }}" value="" required />
                                         @if ($errors->has('password'))
                                         <span id="password-error" class="error text-danger"
                                             for="input-password">{{ $errors->first('password') }}</span>
@@ -126,7 +126,7 @@
                                     <div class="form-group">
                                         <input class="form-control" name="password_confirmation"
                                             id="input-password-confirmation" type="password"
-                                            placeholder="{{ __('Confirme a nova senha') }}" value="" required />
+                                            placeholder="{{ __('Informe novamente a nova senha do usuário') }}" value="" required />
                                     </div>
                                 </div>
                             </div>
