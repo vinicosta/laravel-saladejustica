@@ -25,8 +25,8 @@
                         @endif
                         <div class="row">
                             <div class="col-12 text-right">
-                                <a href="{{ route('size.create') }}"
-                                    class="btn btn-sm btn-primary">{{ __('Adicionar') }}</a>
+                                <a href="{{ route('size.create') }}" class="btn btn-sm btn-primary">
+                                    <i class="material-icons" style="color: white">post_add</i> {{ __('Adicionar') }}</a>
                             </div>
                         </div>
                         <div class="table-responsive">

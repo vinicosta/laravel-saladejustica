@@ -9,14 +9,8 @@ function search(element_id, url, target) {
             },
             success: function (data) {
                 $(target).html(data);
+                hideProgressBar();
             }
         });
-        hideProgressBar();
-    });
-
-    $.ajaxSetup({
-        headers: {
-            'csrftoken': '{{ csrf_token() }}'
-        }
     });
 }

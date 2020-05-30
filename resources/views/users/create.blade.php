@@ -17,8 +17,9 @@
                         <div class="card-body ">
                             <div class="row">
                                 <div class="col-md-12 text-right">
-                                    <a href="{{ route('user.index') }}"
-                                        class="btn btn-sm btn-primary">{{ __('Voltar') }}</a>
+                                    <a href="{{ route('user.index') }}" class="btn btn-sm btn-primary">
+                                        <i class="material-icons" style="color: white">arrow_back</i> {{ __('Voltar') }}
+                                    </a>
                                 </div>
                             </div>
                             <div class="row">
@@ -77,7 +78,9 @@
                             </div>
                         </div>
                         <div class="card-footer ml-auto mr-auto">
-                            <button type="submit" class="btn btn-primary">{{ __('Adicionar') }}</button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="material-icons" style="color: white">save</i> {{ __('Salvar') }}
+                            </button>
                         </div>
                     </div>
                 </form>

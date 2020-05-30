@@ -64,3 +64,47 @@ if (!function_exists('termToSearch')) {
         return '%' . str_replace(' ', '%', trim($term)) . '%';
     }
 }
+
+if (!function_exists('periodicsDetails')) {
+    function periodicsDetails($publisher, $issues_count, $date_publication, $fulldate = false)
+    {
+        setlocale(LC_ALL, 'pt_BR');
+        $label = ' edição';
+
+        if ($issues_count > 1){
+            $label = ' edições';
+        }
+
+        $details = $publisher;
+
+        if($publisher != '' and ($issues_count or $date_publication != '')){
+            $details .= ' - ';
+        }
+        if($issues_count){
+            $details .= $issues_count . $label;
+        }
+        if($date_publication != ''){
+            if(!$fulldate){
+                $details .= strftime('%b %Y', strtotime($date_publication));
+            }
+            else{
+                $details .= strftime('%B de %Y', strtotime($date_publication));
+            }
+        }
+
+        return $details;
+    }
+}
+
+if (!function_exists('periodicsTitle')) {
+    function periodicsTitle($name, $issue_number)
+    {
+        $title = $name;
+
+        if($issue_number != ''){
+            $title .= ' #' . $issue_number;
+        }
+
+        return $title;
+    }
+}

@@ -37,4 +37,9 @@ class Title extends Model
         return $this->hasMany('App\Issue');
     }
 
+    public function readings()
+    {
+        return $this->hasMany('App\Reading');
+    }
+
 }

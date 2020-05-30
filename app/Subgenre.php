@@ -15,4 +15,5 @@ class Subgenre extends Model
     {
         return $this->belongsTo('App\Genre');
     }
+
 }

@@ -58,7 +58,9 @@
                             </div>
                         </div>
                         <div class="card-footer ml-auto mr-auto">
-                            <button type="submit" class="btn btn-primary">{{ __('Salvar') }}</button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="material-icons" style="color: white">save</i> {{ __('Salvar') }}
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -132,7 +134,9 @@
                             </div>
                         </div>
                         <div class="card-footer ml-auto mr-auto">
-                            <button type="submit" class="btn btn-primary">{{ __('Alterar senha') }}</button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="material-icons" style="color: white">vpn_key</i> {{ __('Alterar senha') }}
+                            </button>
                         </div>
                     </div>
                 </form>

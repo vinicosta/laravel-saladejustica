@@ -24,4 +24,14 @@ class Issue extends Model
         return $this->belongsTo('App\Title');
     }
 
+    public function colections()
+    {
+        return $this->hasMany('App\Collection');
+    }
+
+    public function readeds()
+    {
+        return $this->hasMany('App\Readed');
+    }
+
 }

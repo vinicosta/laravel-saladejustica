@@ -84,11 +84,18 @@
     <script src="{{ asset('material') }}/js/progress-bar.js"></script>
     <script src="{{ asset('material') }}/js/search.js"></script>
     <script src="{{ asset('material') }}/js/autocomplete.js"></script>
+    <script src="{{ asset('material') }}/js/actions.js"></script>
     <script>
         $(document).ready(function() {
             hideProgressBar();
         });
         showProgressBarOnDown('search');
+
+        user_id = "{{ \Auth::id() }}";
+        csrftoken = '{{ csrf_token() }}';
+        url_reading = "{{ URL::to('reading') }}";
+        url_collection = "{{ URL::to('collection') }}";
+        url_readed = "{{ URL::to('readed') }}";
     </script>
     @stack('js')
 </body>
