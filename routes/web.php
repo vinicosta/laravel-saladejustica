@@ -75,12 +75,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('size/search/return/{type}', 'SizeController@search');
     Route::get('size/search/return/{type}/type/{id}', 'SizeController@search');
 
-    Route::post('issue/store', 'IssueController@store')->name('issue.store');
-    Route::post('issue/update', 'IssueController@update')->name('issue.update');
+    Route::resource('issue', 'IssueController', ['except' => ['show']]);
     Route::get('issue/{type}', 'IssueController@index');
     Route::get('issue/{type}/create', 'IssueController@create');
     Route::get('issue/{type}/{id}', 'IssueController@show');
     Route::get('issue/{type}/{id}/edit', 'IssueController@edit');
+    Route::get('issue/{type}/{id}/delete', 'IssueController@delete');
     Route::get('issue/{type}/search/return/{index}', 'IssueController@search');
 
     Route::get('issue/{type}/title/{id}', 'TitleController@show');

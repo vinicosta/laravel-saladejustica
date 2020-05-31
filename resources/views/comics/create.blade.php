@@ -88,18 +88,18 @@
                                                 <select class="form-control {{ $errors->has('month_publication') ? ' is-invalid' : '' }}" data-style="btn btn-link" name="month_publication"
                                                     id="input-month_publication" placeholder="{{ __('Informe o tipo do tamanho') }}">
                                                     <option>Mês</option>
-                                                    <option value="1">Janeiro</option>
-                                                    <option value="2">Fevereiro</option>
-                                                    <option value="3">Março</option>
-                                                    <option value="4">Abril</option>
-                                                    <option value="5">Maio</option>
-                                                    <option value="6">Junho</option>
-                                                    <option value="7">Julho</option>
-                                                    <option value="8">Agosto</option>
-                                                    <option value="9">Setembro</option>
-                                                    <option value="10">Outubro</option>
-                                                    <option value="11">Novembro</option>
-                                                    <option value="12">Dezembro</option>
+                                                    <option value="1" {{ old('month_publication') == '1' ? 'selected' : '' }}>Janeiro</option>
+                                                    <option value="2" {{ old('month_publication') == '2' ? 'selected' : '' }}>Fevereiro</option>
+                                                    <option value="3" {{ old('month_publication') == '3' ? 'selected' : '' }}>Março</option>
+                                                    <option value="4" {{ old('month_publication') == '4' ? 'selected' : '' }}>Abril</option>
+                                                    <option value="5" {{ old('month_publication') == '5' ? 'selected' : '' }}>Maio</option>
+                                                    <option value="6" {{ old('month_publication') == '6' ? 'selected' : '' }}>Junho</option>
+                                                    <option value="7" {{ old('month_publication') == '7' ? 'selected' : '' }}>Julho</option>
+                                                    <option value="8" {{ old('month_publication') == '8' ? 'selected' : '' }}>Agosto</option>
+                                                    <option value="9" {{ old('month_publication') == '9' ? 'selected' : '' }}>Setembro</option>
+                                                    <option value="10" {{ old('month_publication') == '10' ? 'selected' : '' }}>Outubro</option>
+                                                    <option value="11" {{ old('month_publication') == '11' ? 'selected' : '' }}>Novembro</option>
+                                                    <option value="12" {{ old('month_publication') == '12' ? 'selected' : '' }}>Dezembro</option>
                                                 </select>
                                                 @if ($errors->has('month_publication'))
                                                 <span id="month_publication-error" class="error text-danger" for="input-month_publication">{{ $errors->first('month_publication') }}</span>

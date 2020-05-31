@@ -15,8 +15,9 @@
                         <p class="card-category">{{ periodicsDetails($issue->publisher_name, 0, $issue->date_publication, true) }}</p>
                     </div>
                     <div class="card-body">
+                        @include('layouts.status')
                         <div class="row">
-                            <div class="col-lg-6 col-sm-12 text-left">
+                            <div class="col-lg-6 col-sm-12 text-lg-left text-sm-center">
                                 {{-- Edit issue --}}
                                 <a href="{{ URL::to('issue/comics/' . $issue->id . '/edit') }}" class="btn btn-sm btn-primary" title="Editar">
                                     <i class="material-icons" style="color: white">edit</i>
@@ -47,7 +48,7 @@
                                     <i class="material-icons" style="color: white">visibility_off</i>
                                 </a>
                             </div>
-                            <div class="col-lg-6 col-sm-12 text-right">
+                            <div class="col-lg-6 col-sm-12 text-lg-right text-sm-center">
                                 {{-- Show first issue --}}
                                 @if($issue->first_issue)
                                 <a href="{{ URL::to('issue/comics/' . $issue->first_issue) }}" class="btn btn-sm btn-warning">
@@ -85,7 +86,7 @@
                         <div class="row"><div>&nbsp;</div></div>
                         <div class="row">
                             <div class="col-lg-4 col-sm-12" style="text-align: center">
-                                <img src="{{ $issue->image != '' ? url("storage/covers/{$issue->image}") : url('storage/covers/blank.png') }}"
+                                <img src="{{ $issue->image != '' ? asset("storage/covers/{$issue->image}") : url('storage/covers/blank.png') }}"
                                     style="max-width: 400px; height: 400px;">
                             </div>
                             <div class="col-lg-8 col-sm-12">

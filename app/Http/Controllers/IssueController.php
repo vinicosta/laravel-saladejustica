@@ -104,7 +104,7 @@ class IssueController extends Controller
         $this->createPreviousIssues($request, $model);
 
         // Redirect to show issue
-        return redirect('issue/' . typeName($request->type_id) . '/show/' . $issue->id);
+        return redirect('issue/' . typeName($request->type_id) . '/' . $issue->id);
     }
 
     public function createPreviousIssues(IssueRequest $request, Issue $model)
@@ -148,7 +148,7 @@ class IssueController extends Controller
     {
         $issue = Issue::select('id')
             ->where('title_id', '=', $title_id)
-            ->Where('issue_number', '=', $issue_number)
+            ->where('issue_number', '=', $issue_number)
             ->get();
 
 
@@ -167,13 +167,28 @@ class IssueController extends Controller
     public function storeImage(IssueRequest $request): string
     {
         if ($request->hasFile('image_file') && $request->file('image_file')->isValid()) {
+
+            $path = 'public/covers';
+
+            // Delete old cover image
+            $this->deleteImage($request->image);
+
+            // Upload new cover image
             $name = typeName($request->type_id) . '/' . slug($request->name, 3) . '/' . uniqid() . '_' .  slug($request->name) . '-' . $request->issue_number;
             $extension = $request->image_file->extension();
             $fullName = "{$name}.{$extension}";
-            $upload = $request->image_file->storeAs('covers', $fullName);
+            $upload = $request->image_file->storeAs($path, $fullName);
+
             return $fullName;
         }
         return '';
+    }
+
+    public function deleteImage($image)
+    {
+        if($image != ''){
+            Storage::delete('public/covers/' . $image);
+        }
     }
 
     public function storeDatePublication(IssueRequest $request): string
@@ -190,26 +205,62 @@ class IssueController extends Controller
      * @param  \App\Issue  $issue
      * @return \Illuminate\View\View
      */
-    public function edit(Issue $model, $type, $id){
-        $issue = $model->find($id);
-        
+    public function edit(Issue $issue, $type, $id){
+        $issueCollection = Issue::select('issues.*', 'titles.periodicity_id')
+                ->join('titles', 'titles.id', '=', 'issues.title_id')
+                ->Where('issues.id', '=', $id)
+                ->get();
+        $issue = $issueCollection[0];
+
         return view("$type.form", compact('issue'));
     }
 
     /**
-     * Update the specified Subgenre in storage
+     * Update the specified issue in storage
      *
      * @param  \App\Http\Requests\IssueRequest  $request
-     * @param  \App\Subgenre  $issue
+     * @param  \App\Issue  $issue
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(IssueRequest $request, Issue $issue)
     {
-        $issue->update(
-            $request->all()
-        );
+        // Store cover image, if uploaded
+        $request->merge(['image' => $this->storeImage($request)]);
 
-        return redirect()->route('subgenre.index')->withStatus(__('Subgênero atualizado com sucesso.'));
+        // Create date of publication
+        $request->merge(['date_publication' => $this->storeDatePublication($request)]);
+
+        // Update issue data
+        $issue->update($request->all());
+
+        // Creates previous issues of the title, if they don't exist
+        $this->createPreviousIssues($request, $issue);
+
+        // Redirect to show issue
+        return redirect('issue/' . typeName($request->type_id) . '/' . $issue->id);
+    }
+
+    /**
+     * Show the form for deleting the specified Issue
+     *
+     * @param  \App\Issue  $issue
+     * @return \Illuminate\View\View
+     */
+    public function delete(Issue $issue, $type, $id){
+        $issueCollection = DB::select(
+            "SELECT iss.*, pub.name AS publisher_name,
+            (SELECT count(id) FROM reading WHERE title_id = tit.id) AS readings,
+            (SELECT count(id) FROM collection WHERE issue_id = iss.id) AS collections,
+            (SELECT count(id) FROM readed WHERE issue_id = iss.id) AS readeds
+            FROM issues iss
+            INNER JOIN titles tit ON tit.id = iss.title_id
+            LEFT JOIN publishers pub ON pub.id = tit.publisher_id
+            WHERE iss.id = ?",
+            [$id]
+        );
+        $issue = $issueCollection[0];
+
+        return view("$type.delete", compact('issue'));
     }
 
     /**
@@ -220,9 +271,29 @@ class IssueController extends Controller
      */
     public function destroy(Issue $issue)
     {
+        $issueCollection = DB::select(
+            "SELECT iss.image, tit.type_id
+            FROM issues iss
+            INNER JOIN titles tit ON tit.id = iss.title_id
+            WHERE iss.id = ?",
+            [$issue->id]
+        );
+        $type_id = $issueCollection[0]->type_id;
+        $image = $issueCollection[0]->image;
+
+        // Delete issue from collections
+        DB::table('collection')->where('issue_id', '=', $issue->id)->delete();
+
+        // Delete issue from readeds
+        DB::table('readed')->where('issue_id', '=', $issue->id)->delete();
+
+        // Delete issue
         $issue->delete();
 
-        return redirect()->route('subgenre.index')->withStatus(__('Subgênero excluído com sucesso.'));
+        // Delete image cover
+        $this->deleteImage($image);
+
+        return redirect('issue/' . typeName($type_id))->withStatus(__('Edição excluída com sucesso.'));
     }
 
     public function searchResult(){

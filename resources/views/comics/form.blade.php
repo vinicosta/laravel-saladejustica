@@ -14,10 +14,10 @@
                         @method('post')
                     @endif
 
-                    <input type="hidden" name="id" value="{{ $issue->id ? $issue->id : '' }}">
-                    <input type="hidden" name="title_id" value="{{ $issue->title_id }}}}">
+                    <input type="hidden" name="title_id" value="{{ $issue->title_id }}">
                     <input type="hidden" name="type_id" value="1">
                     <input type="hidden" name="genre_id" value="{{ Config::get('constants.genres.comics') }}">
+                    <input type="hidden" name="periodicity_id" value="{{ $issue->periodicity_id }}">
 
                     <div class="card ">
                         <div class="card-header card-header-primary">
@@ -31,7 +31,7 @@
                                         <i class="material-icons" style="color: white">arrow_back</i> {{ __('Voltar') }}</a>
                                 </div>
                             </div>
-                            
+
                             {{-- Name --}}
                             <div class="row">
                                 <label class="col-sm-2 col-form-label" for="input-name">{{ __('Nome') }}</label>
@@ -47,7 +47,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {{-- Subtitle --}}
                             <div class="row">
                                 <label class="col-sm-2 col-form-label" for="input-subtitle">{{ __('Subtítulo') }}</label>
@@ -61,7 +61,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {{-- Issue number --}}
                             <div class="row">
                                 <label class="col-sm-2 col-form-label" for="input-issue_number">{{ __('Nº da edição') }}</label>
@@ -77,7 +77,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {{-- Month and year of publication --}}
                             <input type="hidden" name="date_publication" value="{{ $issue->date_publication }}">
                             <div class="row">
@@ -126,8 +126,8 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            
+
+
                             {{-- Number of pages --}}
                             <div class="row">
                                 <label class="col-sm-2 col-form-label" for="input-number_pages">{{ __('Nº de páginas') }}</label>
@@ -176,7 +176,7 @@
                                 <label class="col-sm-2 col-form-label" for="input-image">{{ __('Capa') }}</label>
                                 <div class="col-sm-7">
                                     <input type="file" name="image_file">
-                                    <input type="hidden" name="image" value="">
+                                    <input type="hidden" name="image" value="{{ old('image', $issue->image) }}">
                                 </div>
                             </div>
 
