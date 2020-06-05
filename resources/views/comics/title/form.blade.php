@@ -5,33 +5,25 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <form method="POST" action="{{ $issue->id ? route('issue.update', $issue) : route('issue.store') }}" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('title.update', $title) }}" autocomplete="off" class="form-horizontal">
                     @csrf
 
-                    @if($issue->id)
-                        @method('put')
-                    @else
-                        @method('post')
-                    @endif
-
-                    <input type="hidden" name="title_id" value="{{ $issue->title_id }}">
                     <input type="hidden" name="type_id" value="1">
                     <input type="hidden" name="genre_id" value="{{ Config::get('constants.genres.comics') }}">
-                    <input type="hidden" name="periodicity_id" value="{{ $issue->periodicity_id }}">
 
                     <div class="card ">
                         <div class="card-header card-header-primary">
-                            <h4 class="card-title">{{ $issue->id ? 'Editar edição de quadrinhos' : 'Adicionar edição de quadrinhos' }}</h4>
+                            <h4 class="card-title">{{ 'Alterar título de quadrinhos' }}</h4>
                             <p class="card-category"></p>
                         </div>
                         <div class="card-body ">
                             <div class="row">
                                 <div class="col-md-12 text-right">
-                                    <a href="{{ URL::to('title/comics/' . $issue->title_id) }}" class="btn btn-sm btn-primary">
-                                        <i class="material-icons" style="color: white">arrow_back</i> {{ __('Voltar') }}</a>
+                                    <a href="{{ URL::to('title/comics/' . $title->id) }}" class="btn btn-sm btn-primary">
+                                        <i class="material-icons" style="color: white">arrow_back</i> {{ 'Voltar' }}</a>
                                 </div>
                             </div>
-
+                            
                             {{-- Name --}}
                             <div class="row">
                                 <label class="col-sm-2 col-form-label" for="input-name">{{ __('Nome') }}</label>
@@ -79,7 +71,7 @@
                             </div>
 
                             {{-- Month and year of publication --}}
-                            <input type="hidden" name="date_publication" value="{{ $issue->date_publication }}">
+                            <input type="hidden" name="date_publication" value="">
                             <div class="row">
                                 <label class="col-sm-2 col-form-label" for="input-month_publication">{{ __('Data de publicação') }}</label>
                                 <div class="col-sm-7">
@@ -92,18 +84,18 @@
                                                 <select class="form-control {{ $errors->has('month_publication') ? ' is-invalid' : '' }}" data-style="btn btn-link" name="month_publication"
                                                     id="input-month_publication" placeholder="{{ __('Informe o tipo do tamanho') }}">
                                                     <option>Mês</option>
-                                                    <option value="1" {{ date('m', strtotime($issue->date_publication)) == '01' ? 'selected' : '' }}>Janeiro</option>
-                                                    <option value="2" {{ date('m', strtotime($issue->date_publication)) == '02' ? 'selected' : '' }}>Fevereiro</option>
-                                                    <option value="3" {{ date('m', strtotime($issue->date_publication)) == '03' ? 'selected' : '' }}>Março</option>
-                                                    <option value="4" {{ date('m', strtotime($issue->date_publication)) == '04' ? 'selected' : '' }}>Abril</option>
-                                                    <option value="5" {{ date('m', strtotime($issue->date_publication)) == '05' ? 'selected' : '' }}>Maio</option>
-                                                    <option value="6" {{ date('m', strtotime($issue->date_publication)) == '06' ? 'selected' : '' }}>Junho</option>
-                                                    <option value="7" {{ date('m', strtotime($issue->date_publication)) == '07' ? 'selected' : '' }}>Julho</option>
-                                                    <option value="8" {{ date('m', strtotime($issue->date_publication)) == '08' ? 'selected' : '' }}>Agosto</option>
-                                                    <option value="9" {{ date('m', strtotime($issue->date_publication)) == '09' ? 'selected' : '' }}>Setembro</option>
-                                                    <option value="10" {{ date('m', strtotime($issue->date_publication)) == '10' ? 'selected' : '' }}>Outubro</option>
-                                                    <option value="11" {{ date('m', strtotime($issue->date_publication)) == '11' ? 'selected' : '' }}>Novembro</option>
-                                                    <option value="12" {{ date('m', strtotime($issue->date_publication)) == '12' ? 'selected' : '' }}>Dezembro</option>
+                                                    <option value="1" {{ old('month_publication') == '1' ? 'selected' : '' }}>Janeiro</option>
+                                                    <option value="2" {{ old('month_publication') == '2' ? 'selected' : '' }}>Fevereiro</option>
+                                                    <option value="3" {{ old('month_publication') == '3' ? 'selected' : '' }}>Março</option>
+                                                    <option value="4" {{ old('month_publication') == '4' ? 'selected' : '' }}>Abril</option>
+                                                    <option value="5" {{ old('month_publication') == '5' ? 'selected' : '' }}>Maio</option>
+                                                    <option value="6" {{ old('month_publication') == '6' ? 'selected' : '' }}>Junho</option>
+                                                    <option value="7" {{ old('month_publication') == '7' ? 'selected' : '' }}>Julho</option>
+                                                    <option value="8" {{ old('month_publication') == '8' ? 'selected' : '' }}>Agosto</option>
+                                                    <option value="9" {{ old('month_publication') == '9' ? 'selected' : '' }}>Setembro</option>
+                                                    <option value="10" {{ old('month_publication') == '10' ? 'selected' : '' }}>Outubro</option>
+                                                    <option value="11" {{ old('month_publication') == '11' ? 'selected' : '' }}>Novembro</option>
+                                                    <option value="12" {{ old('month_publication') == '12' ? 'selected' : '' }}>Dezembro</option>
                                                 </select>
                                                 @if ($errors->has('month_publication'))
                                                 <span id="month_publication-error" class="error text-danger" for="input-month_publication">{{ $errors->first('month_publication') }}</span>
@@ -114,7 +106,7 @@
                                             <div class="col">
                                                 <input class="form-control{{ $errors->has('year_publication') ? ' is-invalid' : '' }}" name="year_publication"
                                                     id="input-year_publication" type="number" placeholder="{{ __('Ano') }}"
-                                                    value="{{ old('year_publication', date('Y', strtotime($issue->date_publication))) }}" />
+                                                    value="{{ old('year_publication', $issue->year_publication) }}" />
                                                 @if ($errors->has('year_publication'))
                                                 <span id="year_publication-error" class="error text-danger"
                                                     for="input-year_publication">{{ $errors->first('year_publication') }}</span>
@@ -127,6 +119,76 @@
                                 </div>
                             </div>
 
+                            {{-- Publisher --}}
+                            <div class="row">
+                                <label class="col-sm-2 col-form-label" for="input-publisher_id">{{ __('Editora') }}</label>
+                                <div class="col-sm-7">
+                                    <div class="form-group{{ $errors->has('publisher_id') ? ' has-danger' : '' }}">
+                                        <input class="form-control{{ $errors->has('publisher_id') ? ' is-invalid' : '' }}" name="publisher_name"
+                                            id="input-publisher_name" placeholder="{{ __('Informe a editora') }}"
+                                            value="{{ old('publisher_name', $issue->id ? $issue->publisher->name : '') }}" />
+                                        @if ($errors->has('publisher_id'))
+                                        <span id="publisher_id-error" class="error text-danger"
+                                            for="input-publisher_id">{{ $errors->first('publisher_id') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <input type="hidden" name="publisher_id" id="input-publisher_id" value="{{ old('publisher_id', $issue->publisher_id) }}">
+                            </div>
+
+                            {{-- Periodicity --}}
+                            <div class="row">
+                                <label class="col-sm-2 col-form-label" for="input-periodicity_id">{{ __('Periodicidade') }}</label>
+                                <div class="col-sm-7">
+                                    <div class="form-group{{ $errors->has('periodicity_id') ? ' has-danger' : '' }}">
+                                        <input class="form-control{{ $errors->has('periodicity_id') ? ' is-invalid' : '' }}" name="periodicity_name"
+                                            id="input-periodicity_name" placeholder="{{ __('Informe a periodicidade') }}"
+                                            value="{{ old('periodicity_name', $issue->id ? $issue->periodicity->name : '') }}" />
+                                        @if ($errors->has('periodicity_id'))
+                                        <span id="periodicity_id-error" class="error text-danger"
+                                            for="input-periodicity_id">{{ $errors->first('periodicity_id') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <input type="hidden" name="periodicity_id" id="input-periodicity_id"
+                                    value="{{ old('periodicity_id', $issue->periodicity_id) }}">
+                            </div>
+
+                            {{-- Size --}}
+                            <div class="row">
+                                <label class="col-sm-2 col-form-label" for="input-size_id">{{ __('Tamanho') }}</label>
+                                <div class="col-sm-7">
+                                    <div class="form-group{{ $errors->has('size_id') ? ' has-danger' : '' }}">
+                                        <input class="form-control{{ $errors->has('size_id') ? ' is-invalid' : '' }}" name="size_name"
+                                            id="input-size_name" placeholder="{{ __('Informe o tamanho') }}"
+                                            value="{{ old('size_name', $issue->id ? $issue->size->name : '') }}" />
+                                        @if ($errors->has('size_id'))
+                                        <span id="size_id-error" class="error text-danger"
+                                            for="input-size_id">{{ $errors->first('size_id') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <input type="hidden" name="size_id" id="input-size_id"
+                                    value="{{ old('size_id', $issue->size_id) }}">
+                            </div>
+
+                            {{-- Subgenre --}}
+                            <div class="row">
+                                <label class="col-sm-2 col-form-label" for="input-subgenre_id">{{ __('Subgênero') }}</label>
+                                <div class="col-sm-7">
+                                    <div class="form-group{{ $errors->has('subgenre_id') ? ' has-danger' : '' }}">
+                                        <input class="form-control{{ $errors->has('subgenre_id') ? ' is-invalid' : '' }}" name="subgenre_name"
+                                            id="input-subgenre_name" placeholder="{{ __('Informe o subgênero') }}"
+                                            value="{{ old('subgenre_name', $issue->id ? $issue->subgenre->name : '') }}" />
+                                        @if ($errors->has('subgenre_id'))
+                                        <span id="subgenre_id-error" class="error text-danger"
+                                            for="input-subgenre_id">{{ $errors->first('subgenre_id') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <input type="hidden" name="subgenre_id" id="input-subgenre_id"
+                                    value="{{ old('subgenre_id', $issue->subgenre_id) }}">
+                            </div>
 
                             {{-- Number of pages --}}
                             <div class="row">
@@ -176,7 +238,7 @@
                                 <label class="col-sm-2 col-form-label" for="input-image">{{ __('Capa') }}</label>
                                 <div class="col-sm-7">
                                     <input type="file" name="image_file">
-                                    <input type="hidden" name="image" value="{{ old('image', $issue->image) }}">
+                                    <input type="hidden" name="image" value="">
                                 </div>
                             </div>
 

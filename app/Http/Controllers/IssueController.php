@@ -19,36 +19,93 @@ class IssueController extends Controller
      */
     public function index(Issue $model, string $type)
     {
-        $issues = $this->getReading(typeId($type));
+        $issues = $this->getReadingList(typeId($type));
 
-        return view("$type.index", ['issues' => $issues]);
+        return view("$type.index", ['issues' => $issues, 'result' => 'issues']);
     }
 
-    public function getReading(int $type)
+    public function getReadingList(int $type)
     {
-        $issues = DB::select(
-            "SELECT tit.id AS title_id, pub.name AS publisher_name, '0' AS issue_count, 'issues' AS result,
-                (SELECT id FROM issues WHERE title_id = tit.id ORDER BY date_publication LIMIT 1) AS id,
-                (SELECT name FROM issues WHERE title_id = tit.id ORDER BY date_publication LIMIT 1) AS name,
-                (SELECT issue_number FROM issues WHERE title_id = tit.id ORDER BY date_publication LIMIT 1) AS issue_number,
-                (SELECT date_publication FROM issues WHERE title_id = tit.id ORDER BY date_publication LIMIT 1) AS date_publication,
-                (SELECT image FROM issues WHERE title_id = tit.id ORDER BY date_publication LIMIT 1) AS image,
-                (SELECT col.id FROM issues iss LEFT JOIN collection col ON iss.id = col.issue_id AND col.user_id = ? WHERE iss.title_id = tit.id ORDER BY iss.date_publication LIMIT 1) AS collection,
-                (SELECT red.id FROM issues iss LEFT JOIN readed red ON iss.id = red.issue_id AND red.user_id = ? WHERE iss.title_id = tit.id ORDER BY iss.date_publication LIMIT 1) AS readed
-            FROM titles tit
-            INNER JOIN reading rng ON tit.id = rng.title_id AND rng.user_id = ?
-            LEFT JOIN publishers pub ON tit.publisher_id = pub.id
-            WHERE tit.type_id = ?
-            ORDER BY date_publication, tit.name",
-            [\Auth::id(), \Auth::id(), \Auth::id(), $type]
-        );
+        // Get reading titles
+        $titles = Title::select('titles.id')
+            ->join('reading', 'titles.id', '=', 'reading.title_id')
+            ->where('titles.type_id', '=', $type)
+            ->where('reading.user_id', '=', \Auth::id())
+            ->get();
+
+        $issues = [];
+
+        // Loop over reading titles and checking if had unread issues
+        foreach($titles as $title){
+            $nextIssue = $this->getNextReading($title->id);
+            if($nextIssue){
+                $issues[] = $nextIssue;
+            }
+        }
+
+        // Sort by issue publication date
+        usort($issues, fn($a, $b) => strcmp($a->date_publication, $b->date_publication));
 
         return $issues;
     }
 
+    public function getNextReading($title_id){
+
+        // Check if title has readed issues
+        $readeds = DB::select(
+            "SELECT iss.id
+            FROM issues iss
+            INNER JOIN titles tit ON tit.id = iss.title_id
+            INNER JOIN readed red ON iss.id = red.issue_id AND red.user_id = ?
+            WHERE iss.title_id = ?",
+            [\Auth::id(), $title_id]
+        );
+
+        if(!$readeds){
+
+            // Title does not have readed issues, get first issue
+            $issue = DB::select(
+                "SELECT iss.id, iss.name, iss.issue_number, iss.image, iss.date_publication, pub.name AS publisher_name, '0' AS issue_count, col.id AS collection, '0' AS readed, tit.id AS title_id
+                FROM issues iss
+                INNER JOIN titles tit ON tit.id = iss.title_id
+                LEFT JOIN publishers pub ON pub.id = tit.publisher_id
+                LEFT JOIN collection col ON iss.id = col.issue_id AND col.user_id = ?
+                WHERE iss.title_id = ?
+                ORDER BY iss.date_publication, iss.issue_number
+                LIMIT 1",
+                [\Auth::id(), $title_id]
+            );
+
+        }
+        else{
+
+            // Title does have readed issues, get firts issue after last readed
+            $issue = DB::select(
+                "SELECT iss.id, iss.name, iss.issue_number, iss.image, iss.date_publication, pub.name AS publisher_name, '0' AS issue_count, col.id AS collection, '0' AS readed, tit.id AS title_id
+                FROM issues iss
+                INNER JOIN titles tit ON tit.id = iss.title_id
+                LEFT JOIN publishers pub ON pub.id = tit.publisher_id
+                LEFT JOIN collection col ON iss.id = col.issue_id AND col.user_id = ?
+                WHERE iss.title_id = ?
+                AND iss.id NOT IN (SELECT issues.id FROM issues INNER JOIN readed ON issues.id = readed.issue_id WHERE issues.title_id = ? AND readed.user_id = ?)
+                AND iss.date_publication >= (SELECT issues.date_publication FROM issues INNER JOIN readed ON issues.id = readed.issue_id WHERE issues.title_id = ? AND readed.user_id = ? ORDER BY issues.date_publication DESC, issues.issue_number DESC LIMIT 1)
+                ORDER BY iss.date_publication, iss.issue_number
+                LIMIT 1",
+                [\Auth::id(), $title_id, $title_id, \Auth::id(), $title_id, \Auth::id()]
+            );
+
+        }
+
+        if($issue){
+            return $issue[0];
+        }
+        else{
+            return null;
+        }
+    }
+
     public function show(Issue $model, string $type, int $id)
     {
-        // $issue = $model->find($id);
         $issue = DB::select(
             "SELECT iss.id, iss.name, iss.subtitle, iss.issue_number, iss.image, iss.date_publication, iss.title_id, iss.synopsis, pub.name AS publisher_name, 'issues' AS result, col.id AS collection, col.added_date, red.id AS readed, red.readed_date, sgr.name AS subgenre_name, siz.name AS size_name, tit.id AS title_id,
             (SELECT id FROM issues WHERE title_id = tit.id AND date_publication < iss.date_publication ORDER BY date_publication ASC LIMIT 1) AS first_issue,
@@ -66,17 +123,64 @@ class IssueController extends Controller
             [\Auth::id(), \Auth::id(), ($id)]
         );
 
-        return view("$type.show", ['issue' => $issue[0]]);
+        return view("$type.show", ['issue' => $issue[0], 'result' => 'issues']);
     }
 
     /**
-     * Show the form for creating a new subgenre
+     * Show the form for creating a new issue
      *
      * @return \Illuminate\View\View
      */
     public function create(Issue $issue, string $type)
     {
         return view("$type.create", compact('issue'));
+    }
+
+    /**
+     * Show the form for creating a new issue from title
+     *
+     * @return \Illuminate\View\View
+     */
+    public function createFromTitle(Issue $issue, string $type, int $title_id)
+    {
+        // Get title
+        $title = Title::find($title_id);
+
+        // Get last issue
+        $issue = Issue::select('*')
+            ->where('title_id', '=', $title_id)
+            ->orderBy('date_publication', 'desc')
+            ->orderBy('issue_number', 'desc')
+            ->limit(1)
+            ->get();
+        $issue = $issue[0];
+
+        // Clear issue id
+        $issue->id = '';
+
+        // Calculates issue number
+        if(is_numeric($issue->issue_number)){
+            $issue->issue_number = $issue->issue_number + 1;
+        }
+        else{
+            $issue->issue_number = '';
+        }
+
+        // Calculates issue publication date
+        $date = new \DateTime($issue->date_publication);
+        $periodicity = Periodicity::find($title->periodicity_id);
+        $interval = new \DateInterval('P' . $periodicity->date_interval_number . strtoupper($periodicity->date_interval));
+        $date = $date->add($interval);
+        $issue->date_publication = $date->format('Y-m-d');
+        $issue->periodicity_id = $periodicity->id;
+
+        // Clear synopsis
+        $issue->synopsis = '';
+
+        // Clear cover image
+        $issue->image = '';
+
+        return view("$type.form", compact('issue'));
     }
 
     /**
@@ -151,7 +255,6 @@ class IssueController extends Controller
             ->where('issue_number', '=', $issue_number)
             ->get();
 
-
         return count($issue);
     }
 
@@ -181,7 +284,7 @@ class IssueController extends Controller
 
             return $fullName;
         }
-        return '';
+        return $request->image;
     }
 
     public function deleteImage($image)
@@ -237,7 +340,7 @@ class IssueController extends Controller
         $this->createPreviousIssues($request, $issue);
 
         // Redirect to show issue
-        return redirect('issue/' . typeName($request->type_id) . '/' . $issue->id);
+        return redirect('issue/' . typeName($request->type_id) . '/' . $issue->id)->withStatus('Dados da edição atualizados com sucesso');
     }
 
     /**
@@ -264,9 +367,9 @@ class IssueController extends Controller
     }
 
     /**
-     * Remove the specified Subgenre from storage
+     * Remove the specified issue from storage
      *
-     * @param  \App\Subgenre  $issue
+     * @param  \App\Issue  $issue
      * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Issue $issue)
@@ -296,13 +399,15 @@ class IssueController extends Controller
         return redirect('issue/' . typeName($type_id))->withStatus(__('Edição excluída com sucesso.'));
     }
 
-    public function searchResult(){
-        return view('subgenre.search');
-    }
+    // public function searchResult(){
+    //     return view('issue.search');
+    // }
 
     public function search(Request $request, Issue $model, string $type, string $return = ''){
+        $result = 'issues';
+
         if($request->term == ''){
-            $issues = $this->getReading(typeId($type));
+            $issues = $this->getReadingList(typeId($type));
         }
         else{
             $term = explode('#', $request->term);
@@ -310,7 +415,7 @@ class IssueController extends Controller
             if(array_key_exists(1, $term) and is_numeric($term[1])){
                 // Select ISSUES by name and number
                 $issues = DB::select(
-                    "SELECT iss.id, iss.name, iss.issue_number, iss.image, pub.name AS publisher_name, '0' AS issue_count, iss.date_publication, 'issues' AS result, col.id AS collection, red.id AS readed, tit.id AS title_id
+                    "SELECT iss.id, iss.name, iss.issue_number, iss.image, pub.name AS publisher_name, '0' AS issue_count, iss.date_publication, col.id AS collection, red.id AS readed, tit.id AS title_id
                     FROM issues iss
                     INNER JOIN titles tit ON iss.title_id = tit.id
                     LEFT JOIN publishers pub ON tit.publisher_id = pub.id
@@ -327,9 +432,9 @@ class IssueController extends Controller
             else{
                 // Select TITLES by name
                 $issues = DB::select(
-                    "SELECT tit.id, tit.name, pub.name AS publisher_name, '' AS issue_number, '' AS date_publication, rng.id AS reading, 'titles' AS result,
+                    "SELECT tit.id, tit.name, pub.name AS publisher_name, '' AS issue_number, '' AS date_publication, rng.id AS reading,
                         (SELECT date_publication FROM issues WHERE title_id = tit.id ORDER BY date_publication DESC LIMIT 1) AS last_issue_date,
-                        (SELECT image FROM issues WHERE title_id = tit.id AND image IS NOT NULL ORDER BY date_publication DESC LIMIT 1) AS image,
+                        (SELECT image FROM issues WHERE title_id = tit.id AND (image IS NOT NULL AND image <> ?) ORDER BY date_publication DESC LIMIT 1) AS image,
                         (SELECT COUNT(id) FROM issues WHERE title_id = tit.id) AS issue_count
                     FROM titles tit
                     LEFT JOIN publishers pub ON tit.publisher_id = pub.id
@@ -338,18 +443,20 @@ class IssueController extends Controller
                     AND (tit.name LIKE ? OR pub.name LIKE ?)
                     ORDER BY last_issue_date DESC, tit.name ASC
                     LIMIT 20",
-                    [\Auth::id(), typeId($type), termToSearch($request->term), termToSearch($request->term)]
+                    ['', \Auth::id(), typeId($type), termToSearch($request->term), termToSearch($request->term)]
                 );
+
+                $result = 'titles';
             }
         }
 
         switch ($return) {
             case 'index':
-                return view('comics.index', ['issues' => $issues, 'search' => $request->term]);
+                return view('comics.index', ['issues' => $issues, 'search' => $request->term, 'result' => $result]);
                 break;
 
             default:
-                return view('comics.grid', compact('issues'));
+                return view('comics.grid', ['issues' => $issues, 'result' => $result]);
                 break;
         }
 

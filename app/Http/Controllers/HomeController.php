@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+Use App\User;
+use Illuminate\Support\Facades\Hash;
+
 class HomeController extends Controller
 {
     /**
@@ -21,6 +24,13 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // $user = User::find(1);
+        // echo '[' . $user->password . ']<br>';
+        // echo '[' . bcrypt('') . ']';
+        // $user->password = bcrypt('');
+        // $user->save();
+        
+        // exit;
         return view('dashboard');
     }
 }

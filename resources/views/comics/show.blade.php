@@ -63,8 +63,8 @@
                                 </a>
                                 @endif
 
-                                {{-- Show all issues of title --}}
-                                <a href="{{ URL::to('issue/comics/title/' . $issue->title_id) }}" class="btn btn-sm btn-warning" title="Ver todos">
+                                {{-- Show title --}}
+                                <a href="{{ URL::to('title/comics/' . $issue->title_id) }}" class="btn btn-sm btn-warning" title="Ver todos">
                                     <i class="material-icons" style="color: white">grid_on</i>
                                 </a>
 
@@ -85,11 +85,11 @@
                         </div>
                         <div class="row"><div>&nbsp;</div></div>
                         <div class="row">
-                            <div class="col-lg-4 col-sm-12" style="text-align: center">
+                            <div class="col-lg-5 col-sm-12 text-center"">
                                 <img src="{{ $issue->image != '' ? asset("storage/covers/{$issue->image}") : url('storage/covers/blank.png') }}"
                                     style="max-width: 400px; height: 400px;">
                             </div>
-                            <div class="col-lg-8 col-sm-12">
+                            <div class="col-lg-7 col-sm-12">
                                 <p>{{ $issue->synopsis != '' ? $issue->synopsis : '(Não há sinopse cadastrada.)' }}</p>
                                 <table>
                                     <tr>
@@ -115,20 +115,3 @@
     </div>
 </div>
 @endsection
-@push('js')
-<script type="text/javascript">
-    $('#search').on('keyup', function(){
-        $value = $(this).val();
-        $.ajax({
-            type: 'get',
-            url: "{{ URL::to('issue/search/return/view/') }}",
-            data: { 'term':$value },
-            success: function(data){
-                $('tbody').html(data);
-            }
-        });
-    });
-
-    $.ajaxSetup({ headers: { 'csrftoken' : '{{ csrf_token() }}' } });
-</script>
-@endpush

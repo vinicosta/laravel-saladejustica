@@ -8,7 +8,7 @@
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title ">{{ __('Quadrinhos') }}</h4>
-                        <p class="card-category"> {{ __('Cadastro de edições de quadrinhos') }}</p>
+                        <p class="card-category"> {{ __('Lista de leitura') }}</p>
                     </div>
                     <div class="card-body">
                         @include('layouts.status')
