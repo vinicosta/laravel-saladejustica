@@ -12,7 +12,7 @@
                     @csrf
 
                     <input type="hidden" name="title_id" value="0">
-                    <input type="hidden" name="type_id" value="1">
+                    <input type="hidden" name="type_id" value="{{ Config::get('constants.types.comics') }}">
                     <input type="hidden" name="genre_id" value="{{ Config::get('constants.genres.comics') }}">
 
                     <div class="card ">

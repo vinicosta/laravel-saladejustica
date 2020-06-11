@@ -1,33 +1,25 @@
-@extends('layouts.app', ['activePage' => 'comics-management', 'titlePage' => __('Quadrinhos'), 'showSearch' => false])
+@extends('layouts.app', ['activePage' => 'books-management', 'titlePage' => __('Livros'), 'showSearch' => false])
 
 @section('content')
 <div class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <form method="POST" action="{{ $issue->id ? route('issue.update', $issue) : route('issue.store') }}" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('issue.store') }}" autocomplete="off" class="form-horizontal" enctype="multipart/form-data">
                     @csrf
 
-                    @if($issue->id)
-                        @method('put')
-                    @else
-                        @method('post')
-                    @endif
-
-                    <input type="hidden" name="title_id" value="{{ $issue->title_id }}">
-                    <input type="hidden" name="type_id" value="{{ Config::get('constants.types.comics') }}">
-                    <input type="hidden" name="genre_id" value="{{ Config::get('constants.genres.comics') }}">
-                    <input type="hidden" name="periodicity_id" value="{{ $issue->periodicity_id }}">
+                    <input type="hidden" name="title_id" value="0">
+                    <input type="hidden" name="type_id" value="{{ Config::get('constants.types.books') }}">
 
                     <div class="card ">
                         <div class="card-header card-header-primary">
-                            <h4 class="card-title">{{ $issue->id ? 'Editar edição de quadrinhos' : 'Adicionar edição de quadrinhos' }}</h4>
+                            <h4 class="card-title">{{ __('Adicionar edição de livro') }}</h4>
                             <p class="card-category"></p>
                         </div>
                         <div class="card-body ">
                             <div class="row">
                                 <div class="col-md-12 text-right">
-                                    <a href="{{ URL::to('title/comics/' . $issue->title_id) }}" class="btn btn-sm btn-primary">
+                                    <a href="{{ URL::to('issue/books') }}" class="btn btn-sm btn-primary">
                                         <i class="material-icons" style="color: white">arrow_back</i> {{ __('Voltar') }}</a>
                                 </div>
                             </div>
@@ -48,27 +40,13 @@
                                 </div>
                             </div>
 
-                            {{-- Subtitle --}}
-                            <div class="row">
-                                <label class="col-sm-2 col-form-label" for="input-subtitle">{{ __('Subtítulo') }}</label>
-                                <div class="col-sm-7">
-                                    <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">
-                                        <input class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" name="subtitle" id="input-subtitle"
-                                            type="text" placeholder="{{ __('Informe o subtítulo da edição') }}" value="{{ old('subtitle', $issue->subtitle) }}" />
-                                        @if ($errors->has('subtitle'))
-                                        <span id="subtitle-error" class="error text-danger" for="input-subtitle">{{ $errors->first('subtitle') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-
                             {{-- Issue number --}}
                             <div class="row">
-                                <label class="col-sm-2 col-form-label" for="input-issue_number">{{ __('Nº da edição') }}</label>
+                                <label class="col-sm-2 col-form-label" for="input-issue_number">{{ __('Volume') }}</label>
                                 <div class="col-sm-7">
                                     <div class="form-group{{ $errors->has('issue_number') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('issue_number') ? ' is-invalid' : '' }}" name="issue_number"
-                                            id="input-issue_number" type="text" placeholder="{{ __('Informe o número da edição') }}"
+                                            id="input-issue_number" type="text" placeholder="{{ __('Informe o número do volume da edição') }}"
                                             value="{{ old('issue_number', $issue->issue_number) }}" />
                                         @if ($errors->has('issue_number'))
                                         <span id="issue_number-error" class="error text-danger"
@@ -78,55 +56,75 @@
                                 </div>
                             </div>
 
-                            {{-- Month and year of publication --}}
-                            <input type="hidden" name="date_publication" value="{{ $issue->date_publication }}">
+                            {{-- Authors --}}
                             <div class="row">
-                                <label class="col-sm-2 col-form-label" for="input-month_publication">{{ __('Data de publicação') }}</label>
+                                <label class="col-sm-2 col-form-label" for="input-authors_id">{{ __('Autores') }}</label>
                                 <div class="col-sm-7">
-                                    <div class="form-group{{ $errors->has('month_publication') or $errors->has('year_publication') ? ' has-danger' : '' }}">
-
-                                        <div class="row">
-
-                                            {{-- Month --}}
-                                            <div class="col">
-                                                <select class="form-control {{ $errors->has('month_publication') ? ' is-invalid' : '' }}" data-style="btn btn-link" name="month_publication"
-                                                    id="input-month_publication" placeholder="{{ __('Informe o tipo do tamanho') }}">
-                                                    <option>Mês</option>
-                                                    <option value="1" {{ date('m', strtotime($issue->date_publication)) == '01' ? 'selected' : '' }}>Janeiro</option>
-                                                    <option value="2" {{ date('m', strtotime($issue->date_publication)) == '02' ? 'selected' : '' }}>Fevereiro</option>
-                                                    <option value="3" {{ date('m', strtotime($issue->date_publication)) == '03' ? 'selected' : '' }}>Março</option>
-                                                    <option value="4" {{ date('m', strtotime($issue->date_publication)) == '04' ? 'selected' : '' }}>Abril</option>
-                                                    <option value="5" {{ date('m', strtotime($issue->date_publication)) == '05' ? 'selected' : '' }}>Maio</option>
-                                                    <option value="6" {{ date('m', strtotime($issue->date_publication)) == '06' ? 'selected' : '' }}>Junho</option>
-                                                    <option value="7" {{ date('m', strtotime($issue->date_publication)) == '07' ? 'selected' : '' }}>Julho</option>
-                                                    <option value="8" {{ date('m', strtotime($issue->date_publication)) == '08' ? 'selected' : '' }}>Agosto</option>
-                                                    <option value="9" {{ date('m', strtotime($issue->date_publication)) == '09' ? 'selected' : '' }}>Setembro</option>
-                                                    <option value="10" {{ date('m', strtotime($issue->date_publication)) == '10' ? 'selected' : '' }}>Outubro</option>
-                                                    <option value="11" {{ date('m', strtotime($issue->date_publication)) == '11' ? 'selected' : '' }}>Novembro</option>
-                                                    <option value="12" {{ date('m', strtotime($issue->date_publication)) == '12' ? 'selected' : '' }}>Dezembro</option>
-                                                </select>
-                                                @if ($errors->has('month_publication'))
-                                                <span id="month_publication-error" class="error text-danger" for="input-month_publication">{{ $errors->first('month_publication') }}</span>
-                                                @endif
-                                            </div>
-
-                                            {{-- Year --}}
-                                            <div class="col">
-                                                <input class="form-control{{ $errors->has('year_publication') ? ' is-invalid' : '' }}" name="year_publication"
-                                                    id="input-year_publication" type="number" placeholder="{{ __('Ano') }}"
-                                                    value="{{ old('year_publication', date('Y', strtotime($issue->date_publication))) }}" />
-                                                @if ($errors->has('year_publication'))
-                                                <span id="year_publication-error" class="error text-danger"
-                                                    for="input-year_publication">{{ $errors->first('year_publication') }}</span>
-                                                @endif
-                                            </div>
-
-                                        </div>
-
+                                    <div class="form-group{{ $errors->has('authors_id') ? ' has-danger' : '' }}">
+                                        <input class="form-control{{ $errors->has('authors_id') ? ' is-invalid' : '' }}" name="authors_name"
+                                            id="input-authors_name" placeholder="{{ __('Informe os autores') }}"
+                                            value="{{ old('authors_name', $issue->id ? $issue->author->name : '') }}" />
+                                        @if ($errors->has('authors_id'))
+                                        <span id="authors_id-error" class="error text-danger"
+                                            for="input-authors_id">{{ $errors->first('authors_id') }}</span>
+                                        @endif
                                     </div>
                                 </div>
+                                <input type="text" name="authors_id" id="input-authors_id" value="{{ old('authors_id', $issue->authors_id) }}">
                             </div>
 
+                            {{-- Publisher --}}
+                            <div class="row">
+                                <label class="col-sm-2 col-form-label" for="input-publisher_id">{{ __('Editora') }}</label>
+                                <div class="col-sm-7">
+                                    <div class="form-group{{ $errors->has('publisher_id') ? ' has-danger' : '' }}">
+                                        <input class="form-control{{ $errors->has('publisher_id') ? ' is-invalid' : '' }}" name="publisher_name"
+                                            id="input-publisher_name" placeholder="{{ __('Informe a editora') }}"
+                                            value="{{ old('publisher_name', $issue->id ? $issue->publisher->name : '') }}" />
+                                        @if ($errors->has('publisher_id'))
+                                        <span id="publisher_id-error" class="error text-danger"
+                                            for="input-publisher_id">{{ $errors->first('publisher_id') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <input type="hidden" name="publisher_id" id="input-publisher_id" value="{{ old('publisher_id', $issue->publisher_id) }}">
+                            </div>
+
+                            {{-- Genre --}}
+                            <div class="row">
+                                <label class="col-sm-2 col-form-label" for="input-genre_id">{{ __('Gênero') }}</label>
+                                <div class="col-sm-7">
+                                    <div class="form-group{{ $errors->has('genre_id') ? ' has-danger' : '' }}">
+                                        <input class="form-control{{ $errors->has('genre_id') ? ' is-invalid' : '' }}" name="authors_name"
+                                            id="input-genre_name" placeholder="{{ __('Informe o subgênero') }}"
+                                            value="{{ old('genre_name', $issue->id ? $issue->genre->name : '') }}" />
+                                        @if ($errors->has('genre_id'))
+                                        <span id="genre_id-error" class="error text-danger"
+                                            for="input-genre_id">{{ $errors->first('genre_id') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <input type="hidden" name="genre_id" id="input-genre_id"
+                                    value="{{ old('genre_id', $issue->genre_id) }}">
+                            </div>
+
+                            {{-- Subgenre --}}
+                            <div class="row">
+                                <label class="col-sm-2 col-form-label" for="input-subgenre_id">{{ __('Subgênero') }}</label>
+                                <div class="col-sm-7">
+                                    <div class="form-group{{ $errors->has('subgenre_id') ? ' has-danger' : '' }}">
+                                        <input class="form-control{{ $errors->has('subgenre_id') ? ' is-invalid' : '' }}" name="subgenre_name"
+                                            id="input-subgenre_name" placeholder="{{ __('Informe o subgênero') }}"
+                                            value="{{ old('subgenre_name', $issue->id ? $issue->subgenre->name : '') }}" />
+                                        @if ($errors->has('subgenre_id'))
+                                        <span id="subgenre_id-error" class="error text-danger"
+                                            for="input-subgenre_id">{{ $errors->first('subgenre_id') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                <input type="hidden" name="subgenre_id" id="input-subgenre_id"
+                                    value="{{ old('subgenre_id', $issue->subgenre_id) }}">
+                            </div>
 
                             {{-- Number of pages --}}
                             <div class="row">
@@ -176,7 +174,7 @@
                                 <label class="col-sm-2 col-form-label" for="input-image">{{ __('Capa') }}</label>
                                 <div class="col-sm-7">
                                     <input type="file" name="image_file">
-                                    <input type="hidden" name="image" value="{{ old('image', $issue->image) }}">
+                                    <input type="hidden" name="image" value="">
                                 </div>
                             </div>
 
@@ -194,17 +192,20 @@
 @endsection
 @push('js')
 <script type="text/javascript">
+    // Autocomplete multiple authors
+    autocompleteMultiple('input-authors_name', 'input-authors_id', "{{ URL::to('author/search/return/json/') }}");
+    
     // Autocomplete publishers
     autocomplete('input-publisher_name', 'input-publisher_id', "{{ URL::to('publisher/search/return/json/') }}");
 
     // Autocomplete periodicities
     autocomplete('input-periodicity_name', 'input-periodicity_id', "{{ URL::to('periodicity/search/return/json/') }}");
 
-    // Autocomplete sizes
-    autocomplete('input-size_name', 'input-size_id', "{{ URL::to('size/search/return/json/type/1') }}");
+    // Autocomplete genres
+    autocomplete('input-genre_name', 'input-genre_id', "{{ URL::to('genre/search/return/json/') }}");
 
     // Autocomplete subgenres
-    autocomplete('input-subgenre_name', 'input-subgenre_id', "{{ URL::to('subgenre/search/return/json/' . Config::get('constants.genres.comics')) }}");
+    autocomplete('input-subgenre_name', 'input-subgenre_id', "{{ URL::to('subgenre/search/return/json/') }}" + $('#input-genre_id').val());
 </script>
 @endpush
 

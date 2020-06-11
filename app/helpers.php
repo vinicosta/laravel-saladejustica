@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Storage;
+
 if (!function_exists('slug')) {
     function slug($z, $length = 0)
     {
@@ -106,5 +108,14 @@ if (!function_exists('periodicsTitle')) {
         }
 
         return $title;
+    }
+}
+
+if (!function_exists('deleteImage')) {
+    function deleteImage($image)
+    {
+        if($image != ''){
+            Storage::delete('public/covers/' . $image);
+        }
     }
 }

@@ -14,4 +14,9 @@ class Genre extends Model
     public function subgenres(){
         return $this->hasMany('App\Subgenre');
     }
+
+    public function titles()
+    {
+        return $this->hasMany('App\Title');
+    }
 }

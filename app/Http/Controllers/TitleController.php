@@ -45,97 +45,85 @@ class TitleController extends Controller
      * @param  \App\Title  $title
      * @return \Illuminate\View\View
      */
-    public function edit(Title $title, $type, $id){
-        $title = Title::find($id);
-        // $title = $title[0];
+    public function edit(Title $title){
 
-        return view("$type.title.form", compact('title'));
+        return view(typeName($title->type_id) . ".title.form", compact('title'));
+
     }
 
     /**
-     * Update the specified issue in storage
+     * Update the specified title in storage
      *
      * @param  \App\Http\Requests\TitleRequest  $request
-     * @param  \App\Issue  $issue
+     * @param  \App\Title  $title
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(TitleRequest $request, Issue $issue)
+    public function update(TitleRequest $request, Title $title)
     {
-        // Store cover image, if uploaded
-        $request->merge(['image' => $this->storeImage($request)]);
+        // Update title data
+        $title->update($request->all());
 
-        // Create date of publication
-        $request->merge(['date_publication' => $this->storeDatePublication($request)]);
-
-        // Update issue data
-        $issue->update($request->all());
-
-        // Creates previous issues of the title, if they don't exist
-        $this->createPreviousIssues($request, $issue);
-
-        // Redirect to show issue
-        return redirect('issue/' . typeName($request->type_id) . '/' . $issue->id);
+        // Redirect to show title
+        return redirect('title/' . typeName($request->type_id) . '/' . $title->id);
     }
 
     /**
-     * Show the form for deleting the specified Issue
+     * Show the form for deleting the specified title
      *
-     * @param  \App\Issue  $issue
+     * @param  \App\Title  $title
      * @return \Illuminate\View\View
      */
-    public function delete(Title $issue, $type, $id){
-        $issueCollection = DB::select(
-            "SELECT iss.*, pub.name AS publisher_name,
+    public function delete(Title $title, $type, $id){
+        $title = DB::select(
+            "SELECT tit.*, pub.name AS publisher_name,
+            (SELECT count(id) FROM issues WHERE title_id = tit.id) AS issues_count,
             (SELECT count(id) FROM reading WHERE title_id = tit.id) AS readings,
-            (SELECT count(id) FROM collection WHERE issue_id = iss.id) AS collections,
-            (SELECT count(id) FROM readed WHERE issue_id = iss.id) AS readeds
-            FROM issues iss
-            INNER JOIN titles tit ON tit.id = iss.title_id
+            (SELECT image FROM issues WHERE title_id = tit.id AND (image IS NOT NULL OR image != '') ORDER BY date_publication DESC LIMIT 1) AS image
+            FROM titles tit
             LEFT JOIN publishers pub ON pub.id = tit.publisher_id
-            WHERE iss.id = ?",
+            WHERE tit.id = ?",
             [$id]
         );
-        $issue = $issueCollection[0];
+        $title = $title[0];
 
-        return view("$type.delete", compact('issue'));
+        return view("$type.title.delete", compact('title'));
     }
 
     /**
-     * Remove the specified issue from storage
+     * Remove the specified title from storage
      *
-     * @param  \App\Issue  $issue
+     * @param  \App\Title  $title
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(Title $issue)
+    public function destroy(Title $title)
     {
-        $issueCollection = DB::select(
-            "SELECT iss.image, tit.type_id
-            FROM issues iss
-            INNER JOIN titles tit ON tit.id = iss.title_id
-            WHERE iss.id = ?",
-            [$issue->id]
+        $issues = DB::select(
+            "SELECT id, image
+            FROM issues
+            WHERE title_id = ?",
+            [$title->id]
         );
-        $type_id = $issueCollection[0]->type_id;
-        $image = $issueCollection[0]->image;
 
-        // Delete issue from collections
-        DB::table('collection')->where('issue_id', '=', $issue->id)->delete();
+        $type_id = $title->type_id;
 
-        // Delete issue from readeds
-        DB::table('readed')->where('issue_id', '=', $issue->id)->delete();
+        // Delete issues from collections and readeds and cover images
+        foreach ($issues as $issue) {
+            DB::table('collection')->where('issue_id', '=', $issue->id)->delete();
+            DB::table('readed')->where('issue_id', '=', $issue->id)->delete();
+            deleteImage($issue->image);
+        }
 
-        // Delete issue
-        $issue->delete();
+        // Delete issues
+        DB::table('issues')->where('title_id', '=', $title->id)->delete();
 
-        // Delete image cover
-        $this->deleteImage($image);
+        // Delete title from reading
+        DB::table('reading')->where('title_id', '=', $title->id)->delete();
 
-        return redirect('issue/' . typeName($type_id))->withStatus(__('Edição excluída com sucesso.'));
+        // Delete title
+        $title->delete();
+
+        return redirect('issue/' . typeName($type_id))->withStatus(__('Título excluído com sucesso.'));
     }
-
-    // public function searchResult(){
-    //     return view('issue.search');
-    // }
 
     public function search(Request $request, Issue $model, string $type, string $return = ''){
         $result = 'issues';

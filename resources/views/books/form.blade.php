@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'comics-management', 'titlePage' => __('Quadrinhos'), 'showSearch' => false])
+@extends('layouts.app', ['activePage' => 'magazines-management', 'titlePage' => __('Revistas'), 'showSearch' => false])
 
 @section('content')
 <div class="content">
@@ -15,19 +15,19 @@
                     @endif
 
                     <input type="hidden" name="title_id" value="{{ $issue->title_id }}">
-                    <input type="hidden" name="type_id" value="{{ Config::get('constants.types.comics') }}">
-                    <input type="hidden" name="genre_id" value="{{ Config::get('constants.genres.comics') }}">
+                    <input type="hidden" name="type_id" value="{{ Config::get('constants.types.magazines') }}">
+                    <input type="hidden" name="genre_id" value="{{ Config::get('constants.genres.magazines') }}">
                     <input type="hidden" name="periodicity_id" value="{{ $issue->periodicity_id }}">
 
                     <div class="card ">
                         <div class="card-header card-header-primary">
-                            <h4 class="card-title">{{ $issue->id ? 'Editar edição de quadrinhos' : 'Adicionar edição de quadrinhos' }}</h4>
+                            <h4 class="card-title">{{ $issue->id ? 'Editar edição de revista' : 'Adicionar edição de revista' }}</h4>
                             <p class="card-category"></p>
                         </div>
                         <div class="card-body ">
                             <div class="row">
                                 <div class="col-md-12 text-right">
-                                    <a href="{{ URL::to('title/comics/' . $issue->title_id) }}" class="btn btn-sm btn-primary">
+                                    <a href="{{ URL::to('title/magazines/' . $issue->title_id) }}" class="btn btn-sm btn-primary">
                                         <i class="material-icons" style="color: white">arrow_back</i> {{ __('Voltar') }}</a>
                                 </div>
                             </div>
@@ -43,20 +43,6 @@
                                         @if ($errors->has('name'))
                                         <span id="name-error" class="error text-danger"
                                             for="input-name">{{ $errors->first('name') }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-
-                            {{-- Subtitle --}}
-                            <div class="row">
-                                <label class="col-sm-2 col-form-label" for="input-subtitle">{{ __('Subtítulo') }}</label>
-                                <div class="col-sm-7">
-                                    <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">
-                                        <input class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" name="subtitle" id="input-subtitle"
-                                            type="text" placeholder="{{ __('Informe o subtítulo da edição') }}" value="{{ old('subtitle', $issue->subtitle) }}" />
-                                        @if ($errors->has('subtitle'))
-                                        <span id="subtitle-error" class="error text-danger" for="input-subtitle">{{ $errors->first('subtitle') }}</span>
                                         @endif
                                     </div>
                                 </div>
@@ -126,7 +112,6 @@
                                     </div>
                                 </div>
                             </div>
-
 
                             {{-- Number of pages --}}
                             <div class="row">
@@ -200,11 +185,8 @@
     // Autocomplete periodicities
     autocomplete('input-periodicity_name', 'input-periodicity_id', "{{ URL::to('periodicity/search/return/json/') }}");
 
-    // Autocomplete sizes
-    autocomplete('input-size_name', 'input-size_id', "{{ URL::to('size/search/return/json/type/1') }}");
-
     // Autocomplete subgenres
-    autocomplete('input-subgenre_name', 'input-subgenre_id', "{{ URL::to('subgenre/search/return/json/' . Config::get('constants.genres.comics')) }}");
+    autocomplete('input-subgenre_name', 'input-subgenre_id', "{{ URL::to('subgenre/search/return/json/' . Config::get('constants.genres.magazines')) }}");
 </script>
 @endpush
 

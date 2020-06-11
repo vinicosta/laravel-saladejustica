@@ -32,6 +32,16 @@ class Title extends Model
         return $this->belongsTo('App\Size');
     }
 
+    public function genre()
+    {
+        return $this->belongsTo('App\Genre');
+    }
+
+    public function subgenre()
+    {
+        return $this->belongsTo('App\Subgenre');
+    }
+
     public function issues()
     {
         return $this->hasMany('App\Issue');

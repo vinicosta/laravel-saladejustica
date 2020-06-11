@@ -54,11 +54,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('issue/{type}/{id}/edit', 'IssueController@edit');
     Route::get('issue/{type}/{id}/delete', 'IssueController@delete');
     Route::get('issue/{type}/search/return/{index}', 'IssueController@search');
+    Route::get('title/{type}/create/{title_id}', 'IssueController@createFromTitle');
 
     Route::resource('title', 'TitleController', ['except' => ['show']]);
     Route::get('title/{type}/{id}', 'TitleController@show');
-    Route::get('title/{type}/{id}/edit', 'TitleController@edit');
-    Route::get('title/{type}/create/{title_id}', 'IssueController@createFromTitle');
+    Route::get('title/{type}/{id}/delete', 'TitleController@delete');
 
     Route::post('reading', 'ReadingController@store');
     Route::delete('reading', 'ReadingController@destroy');

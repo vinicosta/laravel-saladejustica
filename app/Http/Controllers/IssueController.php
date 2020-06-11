@@ -96,12 +96,10 @@ class IssueController extends Controller
 
         }
 
-        if($issue){
-            return $issue[0];
-        }
-        else{
+        if(!$issue){
             return null;
         }
+        return $issue[0];
     }
 
     public function show(Issue $model, string $type, int $id)
@@ -167,12 +165,10 @@ class IssueController extends Controller
         }
 
         // Calculates issue publication date
-        $date = new \DateTime($issue->date_publication);
-        $periodicity = Periodicity::find($title->periodicity_id);
-        $interval = new \DateInterval('P' . $periodicity->date_interval_number . strtoupper($periodicity->date_interval));
-        $date = $date->add($interval);
-        $issue->date_publication = $date->format('Y-m-d');
-        $issue->periodicity_id = $periodicity->id;
+        $issue->date_publication = $this->calcPubDate($issue->date_publication, $title->periodicity_id, '+');
+
+        // Periodicity
+        $issue->periodicity_id = $title->periodicity_id;
 
         // Clear synopsis
         $issue->synopsis = '';
@@ -224,11 +220,7 @@ class IssueController extends Controller
                 if( ! $this->checkIssueExists($request->title_id, $i) ){
 
                     // Calculates publication date
-                    $date = new \DateTime($request->date_publication);
-                    $periodicity = Periodicity::find($request->periodicity_id);
-                    $interval = new \DateInterval('P' . $periodicity->date_interval_number . strtoupper($periodicity->date_interval));
-                    $date = $date->sub($interval);
-                    $request->merge(['date_publication' => $date->format('Y-m-d')]);
+                    $request->merge(['date_publication' => $this->calcPubDate($request->date_publication, $request->periodicity_id, '-')]);
 
                     // Issue number
                     $request->merge(['issue_number' => $i]);
@@ -246,6 +238,21 @@ class IssueController extends Controller
 
         }
 
+    }
+
+    public function calcPubDate($date_publication, $periodicity_id, $operation){
+        $date = new \DateTime($date_publication);
+        $periodicity = Periodicity::find($periodicity_id);
+        $interval = new \DateInterval('P' . $periodicity->date_interval_number . strtoupper($periodicity->date_interval));
+
+        if($operation == '+'){
+            $date = $date->add($interval);
+        }
+        else{
+            $date = $date->sub($interval);
+        }
+
+        return $date->format('Y-m-d');
     }
 
     public function checkIssueExists(int $title_id, int $issue_number)
@@ -274,7 +281,7 @@ class IssueController extends Controller
             $path = 'public/covers';
 
             // Delete old cover image
-            $this->deleteImage($request->image);
+            deleteImage($request->image);
 
             // Upload new cover image
             $name = typeName($request->type_id) . '/' . slug($request->name, 3) . '/' . uniqid() . '_' .  slug($request->name) . '-' . $request->issue_number;
@@ -285,13 +292,6 @@ class IssueController extends Controller
             return $fullName;
         }
         return $request->image;
-    }
-
-    public function deleteImage($image)
-    {
-        if($image != ''){
-            Storage::delete('public/covers/' . $image);
-        }
     }
 
     public function storeDatePublication(IssueRequest $request): string
@@ -394,14 +394,10 @@ class IssueController extends Controller
         $issue->delete();
 
         // Delete image cover
-        $this->deleteImage($image);
+        deleteImage($image);
 
         return redirect('issue/' . typeName($type_id))->withStatus(__('Edição excluída com sucesso.'));
     }
-
-    // public function searchResult(){
-    //     return view('issue.search');
-    // }
 
     public function search(Request $request, Issue $model, string $type, string $return = ''){
         $result = 'issues';
@@ -452,11 +448,11 @@ class IssueController extends Controller
 
         switch ($return) {
             case 'index':
-                return view('comics.index', ['issues' => $issues, 'search' => $request->term, 'result' => $result]);
+                return view("$type.index", ['issues' => $issues, 'search' => $request->term, 'result' => $result]);
                 break;
 
             default:
-                return view('comics.grid', ['issues' => $issues, 'result' => $result]);
+                return view("$type.grid", ['issues' => $issues, 'result' => $result]);
                 break;
         }
 

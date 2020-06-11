@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'comics-management', 'titlePage' => __('Quadrinhos'), 'showSearch' => false, 'model' => 'title'])
+@extends('layouts.app', ['activePage' => 'magazines-management', 'titlePage' => __('Revistas'), 'showSearch' => false, 'model' => 'title'])
 
 @section('content')
 @php
@@ -17,7 +17,6 @@
                         </h4>
                         <p class="card-category">
                             Periodicidade: {{ $title->periodicity_name }}
-                            {{ $title->size_name != '' ? ' | tamanho: ' . $title->size_name     : '' }}
                             {{ $title->subgenre_name != '' ? ' | subgênero: ' . $title->subgenre_name : '' }}
                         </p>
                     </div>
@@ -26,7 +25,7 @@
                         <div class="row">
                             <div class="col-lg-6 col-sm-12 text-lg-left text-sm-center">
                                 {{-- Create issue --}}
-                                <a href="{{ URL::to('title/comics/create/' . $title->id) }}" class="btn btn-sm btn-primary" title="Criar edição">
+                                <a href="{{ URL::to('title/magazines/create/' . $title->id) }}" class="btn btn-sm btn-primary" title="Criar edição">
                                     <i class="material-icons" style="color: white">note_add</i>
                                 </a>
                                 
@@ -36,7 +35,7 @@
                                 </a>
                         
                                 {{-- Delete title --}}
-                                <a href="{{ URL::to('title/comics/' . $title->id . '/delete') }}" class="btn btn-sm btn-danger" title="Excluir título">
+                                <a href="{{ URL::to('title/magazines/' . $title->id . '/delete') }}" class="btn btn-sm btn-danger" title="Excluir título">
                                     <i class="material-icons" style="color: white">delete</i>
                                 </a>
                         
@@ -101,7 +100,7 @@
                                         </div>
                                         <div class="text-center">
                                             <a
-                                                href="{{ URL::to('issue/comics/' . $issue->id) }}">
+                                                href="{{ URL::to('issue/magazines/' . $issue->id) }}">
                                                 <img src="{{ $issue->image != '' ? url("storage/covers/{$issue->image}") : url('storage/covers/blank.png') }}"
                                                     style="max-width: 200px; height: 200px;">
                                             </a>
