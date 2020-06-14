@@ -1,5 +1,10 @@
 function autocomplete(element_name, element_id, url) {
-    $(function() {
+    $(function () {
+        $("#" + element_name).on("keyup", function (event) {
+            if ($("#" + element_name).val() == ''){
+                $("#" + element_id).val('');
+            }
+        });
         showProgressBarOnDown(element_name);
         $("#" + element_name).autocomplete({
             source: url,
@@ -29,6 +34,11 @@ function autocompleteMultiple(element_name, element_id, url) {
                     event.preventDefault();
                 }
             })
+            .on("keyup", function (event) {
+                if ($("#" + element_name).val() == '') {
+                    $("#" + element_id).val('');
+                }
+            })
             .autocomplete({
                 source: function (request, response) {
                     $.getJSON(url, {
@@ -49,21 +59,21 @@ function autocompleteMultiple(element_name, element_id, url) {
                 select: function (event, ui) {
                     var terms = split(this.value);
                     var ids = split($("#" + element_id).val());
-                    
+
                     // remove the current input
                     terms.pop();
                     ids.pop();
-                    
+
                     // add the selected item
                     terms.push(ui.item.value);
                     ids.push(ui.item.id);
-                    
+
                     // add placeholder to get the comma-and-space at the end
                     terms.push("");
                     ids.push("");
                     this.value = terms.join(", ");
                     $("#" + element_id).val(ids.join(","));
-                    
+
                     return false;
                 }
             });

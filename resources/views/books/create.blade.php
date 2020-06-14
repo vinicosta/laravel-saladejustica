@@ -10,6 +10,7 @@
 
                     <input type="hidden" name="title_id" value="0">
                     <input type="hidden" name="type_id" value="{{ Config::get('constants.types.books') }}">
+                    <input type="hidden" name="author_id" value="">
 
                     <div class="card ">
                         <div class="card-header card-header-primary">
@@ -35,6 +36,20 @@
                                         @if ($errors->has('name'))
                                         <span id="name-error" class="error text-danger"
                                             for="input-name">{{ $errors->first('name') }}</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Subtitle --}}
+                            <div class="row">
+                                <label class="col-sm-2 col-form-label" for="input-name">{{ __('Subtítulo') }}</label>
+                                <div class="col-sm-7">
+                                    <div class="form-group{{ $errors->has('subtitle') ? ' has-danger' : '' }}">
+                                        <input class="form-control{{ $errors->has('subtitle') ? ' is-invalid' : '' }}" name="subtitle" id="input-subtitle"
+                                            type="text" placeholder="{{ __('Informe o título da edição') }}" value="{{ old('subtitle', $issue->subtitle) }}" />
+                                        @if ($errors->has('subtitle'))
+                                        <span id="subtitle-error" class="error text-danger" for="input-subtitle">{{ $errors->first('subtitle') }}</span>
                                         @endif
                                     </div>
                                 </div>
@@ -70,7 +85,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <input type="text" name="authors_id" id="input-authors_id" value="{{ old('authors_id', $issue->authors_id) }}">
+                                <input type="hidden" name="authors_id" id="input-authors_id" value="{{ old('authors_id', $issue->authors_id) }}">
                             </div>
 
                             {{-- Publisher --}}
@@ -194,7 +209,7 @@
 <script type="text/javascript">
     // Autocomplete multiple authors
     autocompleteMultiple('input-authors_name', 'input-authors_id', "{{ URL::to('author/search/return/json/') }}");
-    
+
     // Autocomplete publishers
     autocomplete('input-publisher_name', 'input-publisher_id', "{{ URL::to('publisher/search/return/json/') }}");
 

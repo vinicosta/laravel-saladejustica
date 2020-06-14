@@ -30,7 +30,9 @@ class TitleController extends Controller
         );
 
         // Get issues
-        $issues = Issue::select('*')
+        $issues = Issue::select('issues.*', 'readed.id AS readed', 'collection.id AS collection')
+            ->leftJoin('readed', 'issues.id', '=', 'readed.issue_id')
+            ->leftJoin('collection', 'issues.id', '=', 'collection.issue_id')
             ->where('title_id', '=', $id)
             ->orderBy('date_publication', 'desc')
             ->orderBy('issue_number', 'desc')

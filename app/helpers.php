@@ -119,3 +119,31 @@ if (!function_exists('deleteImage')) {
         }
     }
 }
+
+if (!function_exists('listAuthors')) {
+    function listAuthors($authors, $ids = false)
+    {
+        $count = count($authors);
+        $i = 1;
+        $result = '';
+
+        foreach ($authors as $author) {
+            if(!$ids){
+                $result .= $author->name;
+            }
+            else{
+                $result .= $author->id;
+            }
+            if($i < $count){
+                $result .= ',';
+                if(!$ids){
+                    $result .= ' ';
+                }
+            }
+            $i++;
+        }
+
+        return $result;
+    }
+}
+

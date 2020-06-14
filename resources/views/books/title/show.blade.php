@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'magazines-management', 'titlePage' => __('Revistas'), 'showSearch' => false, 'model' => 'title'])
+@extends('layouts.app', ['activePage' => 'books-management', 'titlePage' => __('Livros'), 'showSearch' => false, 'model' => 'title'])
 
 @section('content')
 @php
@@ -12,11 +12,11 @@
                     <div class="card-header card-header-primary">
                         <h4 class="card-title ">
                             {{ $title->name }}
-                            {{ $title->publisher_name != '' ? " - $title->publisher_name" : '' }}
-                            - {{ $title->issues_count }} edições
+                            - {{ $title->issues_count > 1 ? $title->issues_count . ' volumes' : $title->issues_count . ' volume' }}
                         </h4>
                         <p class="card-category">
-                            Periodicidade: {{ $title->periodicity_name }}
+                            {{ $title->publisher_name }}
+                            {{ $title->genre_name != '' ? ' | gênero: ' . $title->genre_name : '' }}
                             {{ $title->subgenre_name != '' ? ' | subgênero: ' . $title->subgenre_name : '' }}
                         </p>
                     </div>
@@ -25,26 +25,26 @@
                         <div class="row">
                             <div class="col-lg-6 col-sm-12 text-lg-left text-sm-center">
                                 {{-- Create issue --}}
-                                <a href="{{ URL::to('title/magazines/create/' . $title->id) }}" class="btn btn-sm btn-primary" title="Criar edição">
+                                <a href="{{ URL::to('title/books/create/' . $title->id) }}" class="btn btn-sm btn-primary" title="Criar edição">
                                     <i class="material-icons" style="color: white">note_add</i>
                                 </a>
-                                
+
                                 {{-- Edit title --}}
                                 <a href="{{ URL::to('title/' . $title->id . '/edit') }}" class="btn btn-sm btn-primary" title="Editar título">
                                     <i class="material-icons" style="color: white">edit</i>
                                 </a>
-                        
+
                                 {{-- Delete title --}}
-                                <a href="{{ URL::to('title/magazines/' . $title->id . '/delete') }}" class="btn btn-sm btn-danger" title="Excluir título">
+                                <a href="{{ URL::to('title/books/' . $title->id . '/delete') }}" class="btn btn-sm btn-danger" title="Excluir título">
                                     <i class="material-icons" style="color: white">delete</i>
                                 </a>
-                        
+
                                 {{-- Mark title in reading --}}
                                 <a href="#" class="btn btn-sm btn-primary" style="display:{{ !$title->reading ? '' : 'none' }}"
                                     id="btn-reading-{{ $title->id }}" onclick="reading({{ $title->id }})" title="Incluir na lista de leitura">
                                     <i class="material-icons" style="color: white">playlist_add</i>
                                 </a>
-                        
+
                                 {{-- Uncheck title from reading --}}
                                 <a href="#" class="btn btn-sm btn-primary" style="display:{{ $title->reading ? '' : 'none' }}"
                                     id="btn-unreading-{{ $title->id }}" onclick="unreading({{ $title->id }})" title="Excluir da lista de leitura">
@@ -68,7 +68,7 @@
                                                             <i class="material-icons">add_circle</i>
                                                         </button>
                                                     </div>
-                                
+
                                                     {{-- Exclude issue from collection --}}
                                                     <div class="col-6 text-center" style="display:{{ $issue->collection ? 'block' : 'none' }}"
                                                         id="btn-uncollection-{{ $issue->id }}">
@@ -77,7 +77,7 @@
                                                             <i class="material-icons">remove_circle</i>
                                                         </button>
                                                     </div>
-                                
+
                                                     {{-- Mark issue as "readed" --}}
                                                     <div class="col-6 text-center" style="display:{{ !$issue->readed ? 'block' : 'none' }}"
                                                         id="btn-readed-{{ $issue->id }}">
@@ -86,7 +86,7 @@
                                                             <i class="material-icons">visibility</i>
                                                         </button>
                                                     </div>
-                                
+
                                                     {{-- Uncheck issue as "readed" --}}
                                                     <div class="col-6 text-center" style="display:{{ $issue->readed ? 'block' : 'none' }}"
                                                         id="btn-unreaded-{{ $issue->id }}">
@@ -100,16 +100,16 @@
                                         </div>
                                         <div class="text-center">
                                             <a
-                                                href="{{ URL::to('issue/magazines/' . $issue->id) }}">
+                                                href="{{ URL::to('issue/books/' . $issue->id) }}">
                                                 <img src="{{ $issue->image != '' ? url("storage/covers/{$issue->image}") : url('storage/covers/blank.png') }}"
                                                     style="max-width: 200px; height: 200px;">
                                             </a>
                                         </div>
                                         <div class="text-center" style="font-weight: bold">
-                                            {{ periodicsTitle($issue->name, $issue->issue_number) }}
+                                            {{ $issue->name }}
                                         </div>
                                         <div class="text-center">
-                                            {{ strftime('%B de %Y', strtotime($issue->date_publication)) }}
+                                            Volume {{ $issue->issue_number }}
                                         </div>
                                     </div>
                                     @endforeach

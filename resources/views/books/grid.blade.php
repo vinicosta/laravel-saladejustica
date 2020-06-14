@@ -66,7 +66,7 @@
                     {{ $issue->name }}
                 </div>
                 <div class="text-center">
-                    
+
                 </div>
             </div>
         @endforeach
