@@ -47,10 +47,13 @@ class TitleController extends Controller
      * @param  \App\Title  $title
      * @return \Illuminate\View\View
      */
-    public function edit(Title $title){
+    public function edit(Title $title, string $type, int $id){
+        // $title = Title::find($id);
+        $title = Title::select('*')
+            ->where('id', '=', $id)
+            ->get();
 
-        return view(typeName($title->type_id) . ".title.form", compact('title'));
-
+        return view("$type.title.form", ['title' => $title[0]]);
     }
 
     /**

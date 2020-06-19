@@ -29,7 +29,7 @@ class HomeController extends Controller
         // echo '[' . bcrypt('') . ']';
         // $user->password = bcrypt('');
         // $user->save();
-        
+
         // exit;
         return view('dashboard');
     }

@@ -30,7 +30,7 @@
                                 </a>
 
                                 {{-- Edit title --}}
-                                <a href="{{ URL::to('title/' . $title->id . '/edit') }}" class="btn btn-sm btn-primary" title="Editar título">
+                                <a href="{{ URL::to('title/books/' . $title->id . '/edit') }}" class="btn btn-sm btn-primary" title="Editar título">
                                     <i class="material-icons" style="color: white">edit</i>
                                 </a>
 

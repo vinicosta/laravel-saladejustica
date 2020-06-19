@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'magazines-management', 'titlePage' => __('Revista'), 'showSearch' => false])
+@extends('layouts.app', ['activePage' => 'books-management', 'titlePage' => __('Livros'), 'showSearch' => false])
 
 @section('content')
 <div class="content">
@@ -11,13 +11,13 @@
 
                     <div class="card ">
                         <div class="card-header card-header-danger">
-                            <h4 class="card-title" style="color: white">{{ __('Excluir título de revista') }}</h4>
+                            <h4 class="card-title" style="color: white">{{ __('Excluir coleção de livros') }}</h4>
                             <p class="card-category">Você tem certeza de que deseja excluir?</p>
                         </div>
                         <div class="card-body ">
                             <div class="row">
                                 <div class="col-md-12 text-right">
-                                    <a href="{{ URL::to('title/magazines/' . $title->id) }}" class="btn btn-sm btn-primary">
+                                    <a href="{{ URL::to('title/books/' . $title->id) }}" class="btn btn-sm btn-primary">
                                         <i class="material-icons" style="color: white">arrow_back</i> {{ __('Voltar') }}</a>
                                 </div>
                             </div>
@@ -33,7 +33,7 @@
                                 <div class="col-sm-12 col-lg-8">
                                     <p><strong>{{ $title->name }}</strong></p>
                                     <p>{{ $title->publisher_name }}</p>
-                                    <p>{{ $title->issues_count }} edições</p>
+                                    <p>{{ $title->issues_count }} volumes</p>
                                     <p></p>
                                     <p>
                                         @if($title->readings)

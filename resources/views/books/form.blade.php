@@ -69,7 +69,7 @@
                                 <div class="col-sm-7">
                                     <div class="form-group{{ $errors->has('issue_number') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('issue_number') ? ' is-invalid' : '' }}" name="issue_number"
-                                            id="input-issue_number" type="text" placeholder="{{ __('Informe o número da edição') }}"
+                                            id="input-issue_number" type="text" placeholder="{{ __('Informe o número do volume') }}"
                                             value="{{ old('issue_number', $issue->issue_number) }}" />
                                         @if ($errors->has('issue_number'))
                                         <span id="issue_number-error" class="error text-danger"

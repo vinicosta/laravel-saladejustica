@@ -413,7 +413,6 @@ class IssueController extends Controller
                 ->get();
         $issue = $issueCollection[0];
 
-
         // Get authors of issue
         $authors = $this->getAuthors($type, $id);
 
@@ -482,7 +481,7 @@ class IssueController extends Controller
     public function destroy(Issue $issue)
     {
         $issueCollection = DB::select(
-            "SELECT iss.image, tit.type_id
+            "SELECT iss.image, tit.type_id, iss.title_id
             FROM issues iss
             INNER JOIN titles tit ON tit.id = iss.title_id
             WHERE iss.id = ?",
@@ -490,6 +489,7 @@ class IssueController extends Controller
         );
         $type_id = $issueCollection[0]->type_id;
         $image = $issueCollection[0]->image;
+        $title_id = $issueCollection[0]->title_id;
 
         // Delete issue from collections
         DB::table('collection')->where('issue_id', '=', $issue->id)->delete();
@@ -502,6 +502,20 @@ class IssueController extends Controller
 
         // Delete image cover
         deleteImage($image);
+
+        // Check if title has no more issues
+        $title = DB::table('issues')
+            ->where('title_id', '=', $title_id)
+            ->get();
+        if(!count($title)){
+            DB::table('titles')
+                ->where('id', '=', $title_id)
+                ->delete();
+
+            DB::table('reading')
+                ->where('title_id', '=', $title_id)
+                ->delete();
+        }
 
         return redirect('issue/' . typeName($type_id))->withStatus(__('Edição excluída com sucesso.'));
     }
@@ -560,8 +574,7 @@ class IssueController extends Controller
             WHERE tit.type_id = ?
             AND iss.name LIKE ?
             AND iss.issue_number = ?
-            ORDER BY iss.date_publication DESC, iss.name ASC
-            LIMIT 20",
+            ORDER BY iss.date_publication DESC, iss.name ASC",
             [\Auth::id(), \Auth::id(), $type_id, termToSearch($name), $issue_number]
         );
 
@@ -579,8 +592,7 @@ class IssueController extends Controller
             LEFT JOIN reading rng ON tit.id = rng.title_id AND rng.user_id = ?
             WHERE tit.type_id = ?
             AND (tit.name LIKE ? OR pub.name LIKE ?)
-            ORDER BY last_issue_date DESC, tit.name ASC
-            LIMIT 20",
+            ORDER BY last_issue_date DESC, tit.name ASC",
             ['', \Auth::id(), $type_id, termToSearch($name), termToSearch($name)]
         );
 
@@ -598,8 +610,7 @@ class IssueController extends Controller
             WHERE tit.type_id = ?
             AND (iss.name LIKE ?
             OR tit.name LIKE ?)
-            ORDER BY iss.name ASC
-            LIMIT 20",
+            ORDER BY iss.name ASC",
             [\Auth::id(), \Auth::id(), $type_id, termToSearch($name), termToSearch($name)]
         );
 

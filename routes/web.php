@@ -59,6 +59,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('title', 'TitleController', ['except' => ['show']]);
     Route::get('title/{type}/{id}', 'TitleController@show');
     Route::get('title/{type}/{id}/delete', 'TitleController@delete');
+    Route::get('title/{type}/{id}/edit', 'TitleController@edit');
 
     Route::post('reading', 'ReadingController@store');
     Route::delete('reading', 'ReadingController@destroy');

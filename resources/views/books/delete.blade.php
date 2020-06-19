@@ -1,4 +1,4 @@
-@extends('layouts.app', ['activePage' => 'magazines-management', 'titlePage' => __('Revistas'), 'showSearch' => false])
+@extends('layouts.app', ['activePage' => 'books-management', 'titlePage' => __('Livros'), 'showSearch' => false])
 
 @section('content')
 <div class="content">
@@ -11,13 +11,13 @@
 
                     <div class="card ">
                         <div class="card-header card-header-danger">
-                            <h4 class="card-title" style="color: white">{{ __('Excluir edição de revista') }}</h4>
+                            <h4 class="card-title" style="color: white">{{ __('Excluir livro') }}</h4>
                             <p class="card-category">Você tem certeza de que deseja excluir?</p>
                         </div>
                         <div class="card-body ">
                             <div class="row">
                                 <div class="col-md-12 text-right">
-                                    <a href="{{ URL::to('issue/magazines/' . $issue->id) }}" class="btn btn-sm btn-primary">
+                                    <a href="{{ URL::to('issue/books/' . $issue->id) }}" class="btn btn-sm btn-primary">
                                         <i class="material-icons" style="color: white">arrow_back</i> {{ __('Voltar') }}</a>
                                 </div>
                             </div>
@@ -31,9 +31,9 @@
                                 </div>
                                 @endif
                                 <div class="col-sm-12 col-lg-8">
-                                    <p><strong>{{ __($issue->issue_number != '' ? $issue->name . ' #' . $issue->issue_number : $issue->name) }}</strong></p>
+                                    <p><strong>{{ $issue->name }}</strong></p>
                                     {{ $issue->subtitle != '' ? "<p>$issue->subtitle</p" : '' }}
-                                    <p>{{ periodicsDetails($issue->publisher_name, 0, $issue->date_publication, true) }}</p>
+                                    <p>{{ $issue->publisher_name }}</p>
                                     <p></p>
                                     <p>
                                         @if($issue->readings)

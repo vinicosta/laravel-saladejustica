@@ -31,7 +31,7 @@
                                 </a>
 
                                 {{-- Edit title --}}
-                                <a href="{{ URL::to('title/' . $title->id . '/edit') }}" class="btn btn-sm btn-primary" title="Editar título">
+                                <a href="{{ URL::to('title/comics/' . $title->id . '/edit') }}" class="btn btn-sm btn-primary" title="Editar título">
                                     <i class="material-icons" style="color: white">edit</i>
                                 </a>
 
@@ -110,7 +110,7 @@
                                             {{ periodicsTitle($issue->name, $issue->issue_number) }}
                                         </div>
                                         <div class="text-center">
-                                            {{ strftime('%B de %Y', strtotime($issue->date_publication)) }}
+                                            {{ $issue->date_publication != '' ? strftime('%B de %Y', strtotime($issue->date_publication)) : '' }}
                                         </div>
                                     </div>
                                     @endforeach

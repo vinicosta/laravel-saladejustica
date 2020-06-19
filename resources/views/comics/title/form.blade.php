@@ -48,7 +48,7 @@
                                     <div class="form-group{{ $errors->has('publisher_id') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('publisher_id') ? ' is-invalid' : '' }}" name="publisher_name"
                                             id="input-publisher_name" placeholder="{{ __('Informe a editora') }}"
-                                            value="{{ old('publisher_name', $title->id ? $title->publisher->name : '') }}" />
+                                            value="{{ old('publisher_name', $title->publisher ? $title->publisher->name : '') }}" />
                                         @if ($errors->has('publisher_id'))
                                         <span id="publisher_id-error" class="error text-danger"
                                             for="input-publisher_id">{{ $errors->first('publisher_id') }}</span>
@@ -65,7 +65,7 @@
                                     <div class="form-group{{ $errors->has('periodicity_id') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('periodicity_id') ? ' is-invalid' : '' }}" name="periodicity_name"
                                             id="input-periodicity_name" placeholder="{{ __('Informe a periodicidade') }}"
-                                            value="{{ old('periodicity_name', $title->id ? $title->periodicity->name : '') }}" />
+                                            value="{{ old('periodicity_name', $title->periodicity ? $title->periodicity->name : '') }}" />
                                         @if ($errors->has('periodicity_id'))
                                         <span id="periodicity_id-error" class="error text-danger"
                                             for="input-periodicity_id">{{ $errors->first('periodicity_id') }}</span>
@@ -83,7 +83,7 @@
                                     <div class="form-group{{ $errors->has('size_id') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('size_id') ? ' is-invalid' : '' }}" name="size_name"
                                             id="input-size_name" placeholder="{{ __('Informe o tamanho') }}"
-                                            value="{{ old('size_name', $title->id ? $title->size->name : '') }}" />
+                                            value="{{ old('size_name', $title->size ? $title->size->name : '') }}" />
                                         @if ($errors->has('size_id'))
                                         <span id="size_id-error" class="error text-danger"
                                             for="input-size_id">{{ $errors->first('size_id') }}</span>
@@ -101,7 +101,7 @@
                                     <div class="form-group{{ $errors->has('subgenre_id') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('subgenre_id') ? ' is-invalid' : '' }}" name="subgenre_name"
                                             id="input-subgenre_name" placeholder="{{ __('Informe o subgênero') }}"
-                                            value="{{ old('subgenre_name', $title->id ? $title->subgenre->name : '') }}" />
+                                            value="{{ old('subgenre_name', $title->subgenre ? $title->subgenre->name : '') }}" />
                                         @if ($errors->has('subgenre_id'))
                                         <span id="subgenre_id-error" class="error text-danger"
                                             for="input-subgenre_id">{{ $errors->first('subgenre_id') }}</span>

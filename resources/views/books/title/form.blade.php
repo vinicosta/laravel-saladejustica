@@ -47,7 +47,7 @@
                                     <div class="form-group{{ $errors->has('publisher_id') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('publisher_id') ? ' is-invalid' : '' }}" name="publisher_name"
                                             id="input-publisher_name" placeholder="{{ __('Informe a editora') }}"
-                                            value="{{ old('publisher_name', $title->id and $title->publisher ? $title->publisher->name : '') }}" />
+                                            value="{{ old('publisher_name', $title->publisher ? $title->publisher->name : '') }}" />
                                         @if ($errors->has('publisher_id'))
                                         <span id="publisher_id-error" class="error text-danger"
                                             for="input-publisher_id">{{ $errors->first('publisher_id') }}</span>
@@ -64,7 +64,7 @@
                                     <div class="form-group{{ $errors->has('genre_id') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('genre_id') ? ' is-invalid' : '' }}" name="genre_name"
                                             id="input-genre_name" placeholder="{{ __('Informe o gênero') }}"
-                                            value="{{ old('genre_name', $title->id and $title->genre ? $title->genre->name : '') }}" />
+                                            value="{{ old('genre_name', $title->genre ? $title->genre->name : '') }}" />
                                         @if ($errors->has('genre_id'))
                                         <span id="genre_id-error" class="error text-danger"
                                             for="input-genre_id">{{ $errors->first('genre_id') }}</span>
@@ -82,7 +82,7 @@
                                     <div class="form-group{{ $errors->has('subgenre_id') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('subgenre_id') ? ' is-invalid' : '' }}" name="subgenre_name"
                                             id="input-subgenre_name" placeholder="{{ __('Informe o subgênero') }}"
-                                            value="{{ old('subgenre_name', $title->id and $title->subgenre ? $title->subgenre->name : '') }}" />
+                                            value="{{ old('subgenre_name', $title->subgenre ? $title->subgenre->name : '') }}" />
                                         @if ($errors->has('subgenre_id'))
                                         <span id="subgenre_id-error" class="error text-danger"
                                             for="input-subgenre_id">{{ $errors->first('subgenre_id') }}</span>
@@ -117,7 +117,10 @@
     autocomplete('input-genre_name', 'input-genre_id', "{{ URL::to('genre/search/return/json/') }}");
 
     // Autocomplete subgenres
-    autocomplete('input-subgenre_name', 'input-subgenre_id', "{{ URL::to('subgenre/search/return/json/' . Config::get('constants.genres.books')) }}");
+    autocomplete('input-subgenre_name', 'input-subgenre_id', "{{ URL::to('subgenre/search/return/json') }}/" + $('#input-genre_id').val());
+    $("#input-genre_name").on("keyup", function (event) {
+        autocomplete('input-subgenre_name', 'input-subgenre_id', "{{ URL::to('subgenre/search/return/json') }}/" + $('#input-genre_id').val());
+    });
 </script>
 @endpush
 

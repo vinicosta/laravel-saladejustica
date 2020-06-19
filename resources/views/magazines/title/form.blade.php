@@ -24,7 +24,7 @@
                                         <i class="material-icons" style="color: white">arrow_back</i> {{ 'Voltar' }}</a>
                                 </div>
                             </div>
-                            
+
                             {{-- Name --}}
                             <div class="row">
                                 <label class="col-sm-2 col-form-label" for="input-name">{{ __('Nome') }}</label>
@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {{-- Publisher --}}
                             <div class="row">
                                 <label class="col-sm-2 col-form-label" for="input-publisher_id">{{ __('Editora') }}</label>
@@ -48,7 +48,7 @@
                                     <div class="form-group{{ $errors->has('publisher_id') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('publisher_id') ? ' is-invalid' : '' }}" name="publisher_name"
                                             id="input-publisher_name" placeholder="{{ __('Informe a editora') }}"
-                                            value="{{ old('publisher_name', $title->id ? $title->publisher->name : '') }}" />
+                                            value="{{ old('publisher_name', $title->publisher ? $title->publisher->name : '') }}" />
                                         @if ($errors->has('publisher_id'))
                                         <span id="publisher_id-error" class="error text-danger"
                                             for="input-publisher_id">{{ $errors->first('publisher_id') }}</span>
@@ -57,7 +57,7 @@
                                 </div>
                                 <input type="hidden" name="publisher_id" id="input-publisher_id" value="{{ old('publisher_id', $title->publisher_id) }}">
                             </div>
-                            
+
                             {{-- Periodicity --}}
                             <div class="row">
                                 <label class="col-sm-2 col-form-label" for="input-periodicity_id">{{ __('Periodicidade') }}</label>
@@ -65,7 +65,7 @@
                                     <div class="form-group{{ $errors->has('periodicity_id') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('periodicity_id') ? ' is-invalid' : '' }}" name="periodicity_name"
                                             id="input-periodicity_name" placeholder="{{ __('Informe a periodicidade') }}"
-                                            value="{{ old('periodicity_name', $title->id ? $title->periodicity->name : '') }}" />
+                                            value="{{ old('periodicity_name', $title->periodicity ? $title->periodicity->name : '') }}" />
                                         @if ($errors->has('periodicity_id'))
                                         <span id="periodicity_id-error" class="error text-danger"
                                             for="input-periodicity_id">{{ $errors->first('periodicity_id') }}</span>
@@ -75,7 +75,7 @@
                                 <input type="hidden" name="periodicity_id" id="input-periodicity_id"
                                     value="{{ old('periodicity_id', $title->periodicity_id) }}">
                             </div>
-                            
+
                             {{-- Subgenre --}}
                             <div class="row">
                                 <label class="col-sm-2 col-form-label" for="input-subgenre_id">{{ __('Subgênero') }}</label>
@@ -83,7 +83,7 @@
                                     <div class="form-group{{ $errors->has('subgenre_id') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('subgenre_id') ? ' is-invalid' : '' }}" name="subgenre_name"
                                             id="input-subgenre_name" placeholder="{{ __('Informe o subgênero') }}"
-                                            value="{{ old('subgenre_name', $title->id ? $title->subgenre->name : '') }}" />
+                                            value="{{ old('subgenre_name', $title->subgenre ? $title->subgenre->name : '') }}" />
                                         @if ($errors->has('subgenre_id'))
                                         <span id="subgenre_id-error" class="error text-danger"
                                             for="input-subgenre_id">{{ $errors->first('subgenre_id') }}</span>

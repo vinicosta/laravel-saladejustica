@@ -111,7 +111,7 @@
                                 <div class="col-sm-7">
                                     <div class="form-group{{ $errors->has('genre_id') ? ' has-danger' : '' }}">
                                         <input class="form-control{{ $errors->has('genre_id') ? ' is-invalid' : '' }}" name="authors_name"
-                                            id="input-genre_name" placeholder="{{ __('Informe o subgênero') }}"
+                                            id="input-genre_name" placeholder="{{ __('Informe o gênero') }}"
                                             value="{{ old('genre_name', $issue->id ? $issue->genre->name : '') }}" />
                                         @if ($errors->has('genre_id'))
                                         <span id="genre_id-error" class="error text-danger"
@@ -220,7 +220,10 @@
     autocomplete('input-genre_name', 'input-genre_id', "{{ URL::to('genre/search/return/json/') }}");
 
     // Autocomplete subgenres
-    autocomplete('input-subgenre_name', 'input-subgenre_id', "{{ URL::to('subgenre/search/return/json/') }}" + $('#input-genre_id').val());
+    autocomplete('input-subgenre_name', 'input-subgenre_id', "{{ URL::to('subgenre/search/return/json') }}/" + $('#input-genre_id').val());
+    $("#input-genre_name").on("keyup", function (event) {
+        autocomplete('input-subgenre_name', 'input-subgenre_id', "{{ URL::to('subgenre/search/return/json') }}/" + $('#input-genre_id').val());
+    });
 </script>
 @endpush
 

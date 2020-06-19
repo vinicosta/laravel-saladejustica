@@ -115,7 +115,9 @@
                                 <p></p>
                                 <p>
                                     {{ $issue->collection ? 'Adicionado na coleção em ' . strftime('%d/%m/%Y', strtotime($issue->added_date)) . '.' : '' }}<br>
-                                    {{ $issue->readed ? 'Marcado como lido em ' . strftime('%d/%m/%Y', strtotime($issue->readed_date)) . '.' : '' }}
+                                    @if($issue->readed)
+                                    {{ $issue->readed_date != '' ?  'Marcado como lido em ' . strftime('%d/%m/%Y', strtotime($issue->readed_date)) . '.' : 'Marcado como lido.' }}
+                                    @endif
                                 </p>
                             </div>
                         </div>
