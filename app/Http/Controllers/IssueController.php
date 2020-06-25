@@ -44,10 +44,28 @@ class IssueController extends Controller
             }
         }
 
-        // Sort by issue publication date
-        usort($issues, fn($a, $b) => strcmp($a->date_publication, $b->date_publication));
+        // If it is books, sort by name
+        if($type_id == 2){
+            usort($issues, fn($a, $b) => strcmp($a->name, $b->name));
+        }
+        // Else, sort by issue publication date
+        else{
+            usort($issues, fn($a, $b) => strcmp($a->date_publication, $b->date_publication));
+        }
 
         return $issues;
+    }
+
+    public function next(string $type, int $title_id)
+    {
+        $issue = $this->getNextReading($title_id, typeId($type));
+
+        if(!$issue){
+            return null;
+        }
+
+        return view("$type/issue", ['issue' => $issue, 'result' => 'issues']);
+
     }
 
     public function getNextReading($title_id, $type_id){
@@ -113,6 +131,19 @@ class IssueController extends Controller
         return $issue[0];
     }
 
+    public function rand(string $type)
+    {
+        // Get reading titles
+        $issues = $this->getReadingList(typeId($type));
+
+        // Rand issue number
+        $issue_number = rand(0, count($issues) - 1);
+        $issue = $issues[$issue_number];
+
+        // Redirect to show issue
+        return redirect("issue/$type/$issue->id");
+    }
+
     public function show(Issue $model, string $type, int $id)
     {
         $nav_issues =
@@ -129,7 +160,7 @@ class IssueController extends Controller
         }
 
         $issue = DB::select(
-            "SELECT iss.id, iss.name, iss.subtitle, iss.issue_number, iss.image, iss.date_publication, iss.title_id, iss.synopsis, iss.isbn, pub.name AS publisher_name, col.id AS collection, col.added_date, red.id AS readed, red.readed_date, gen.name AS genre_name, sgr.name AS subgenre_name, siz.name AS size_name, tit.id AS title_id, tit.name AS title_name,"
+            "SELECT iss.id, iss.name, iss.subtitle, iss.issue_number, iss.image, iss.date_publication, iss.title_id, iss.synopsis, iss.isbn, iss.number_pages, pub.name AS publisher_name, col.id AS collection, col.added_date, red.id AS readed, red.readed_date, gen.name AS genre_name, sgr.name AS subgenre_name, siz.name AS size_name, tit.id AS title_id, tit.name AS title_name,"
             . $nav_issues .
             "FROM issues iss
             INNER JOIN titles tit ON iss.title_id = tit.id
@@ -520,7 +551,8 @@ class IssueController extends Controller
         return redirect('issue/' . typeName($type_id))->withStatus(__('Edição excluída com sucesso.'));
     }
 
-    public function search(Request $request, Issue $model, string $type, string $return = ''){
+    public function search(Request $request, Issue $model, string $type, string $return = '')
+    {
         $result = 'issues';
 
         if($request->term == ''){

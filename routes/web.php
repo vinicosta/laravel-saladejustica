@@ -50,16 +50,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('issue', 'IssueController', ['except' => ['show']]);
     Route::get('issue/{type}', 'IssueController@index');
     Route::get('issue/{type}/create', 'IssueController@create');
+    Route::get('issue/{type}/rand', 'IssueController@rand');
     Route::get('issue/{type}/{id}', 'IssueController@show');
     Route::get('issue/{type}/{id}/edit', 'IssueController@edit');
     Route::get('issue/{type}/{id}/delete', 'IssueController@delete');
     Route::get('issue/{type}/search/return/{index}', 'IssueController@search');
-    Route::get('title/{type}/create/{title_id}', 'IssueController@createFromTitle');
 
     Route::resource('title', 'TitleController', ['except' => ['show']]);
     Route::get('title/{type}/{id}', 'TitleController@show');
     Route::get('title/{type}/{id}/delete', 'TitleController@delete');
     Route::get('title/{type}/{id}/edit', 'TitleController@edit');
+    
+    Route::get('title/{type}/{id}/next', 'IssueController@next');
+    Route::get('title/{type}/create/{title_id}', 'IssueController@createFromTitle');
 
     Route::post('reading', 'ReadingController@store');
     Route::delete('reading', 'ReadingController@destroy');

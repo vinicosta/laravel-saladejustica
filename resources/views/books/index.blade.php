@@ -8,12 +8,16 @@
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title ">{{ __('Livros') }}</h4>
-                        <p class="card-category"> {{ __('Lista de leitura') }}</p>
+                        <p class="card-category">
+                            Lista de leitura - {{ count($issues) }} livro{{ count($issues) != 1 ? 's' : '' }}
+                        </p>
                     </div>
                     <div class="card-body">
                         @include('layouts.status')
                         <div class="row">
                             <div class="col-12 text-right">
+                                <a href="{{ URL::to('issue/books/rand') }}" class="btn btn-sm btn-primary">
+                                    <i class="material-icons" style="color: white">flip_to_front</i> {{ __('Sortear livro') }}</a>
                                 <a href="{{ URL::to('issue/books/create') }}" class="btn btn-sm btn-primary">
                                     <i class="material-icons" style="color: white">note_add</i> {{ __('Adicionar') }}</a>
                             </div>

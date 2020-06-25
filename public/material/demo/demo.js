@@ -4,9 +4,9 @@ demo = {
       /* ----------==========     Daily Sales Chart initialization For Documentation    ==========---------- */
 
       dataDailySalesChart = {
-        labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+        labels: ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
         series: [
-          [12, 17, 7, 17, 23, 18, 38]
+          [12, 17, 7, 17, 23, 18, 380]
         ]
       };
 
@@ -15,7 +15,7 @@ demo = {
           tension: 0
         }),
         low: 0,
-        high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+        high: 500, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
         chartPadding: {
           top: 0,
           right: 0,
@@ -36,9 +36,9 @@ demo = {
       /* ----------==========     Daily Sales Chart initialization    ==========---------- */
 
       dataDailySalesChart = {
-        labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+          labels: ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
         series: [
-          [12, 17, 7, 17, 23, 18, 38]
+          [12, 17, 7, 17, 23, 18, 380]
         ]
       };
 
@@ -47,7 +47,7 @@ demo = {
           tension: 0
         }),
         low: 0,
-        high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+        high: 500, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
         chartPadding: {
           top: 0,
           right: 0,

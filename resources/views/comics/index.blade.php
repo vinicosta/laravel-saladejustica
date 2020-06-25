@@ -8,7 +8,9 @@
                 <div class="card">
                     <div class="card-header card-header-primary">
                         <h4 class="card-title ">{{ __('Quadrinhos') }}</h4>
-                        <p class="card-category"> {{ __('Lista de leitura') }}</p>
+                        <p class="card-category">
+                            Lista de leitura - {{ count($issues) }} quadrinhos{{ count($issues) != 1 ? 's' : '' }}
+                        </p>
                     </div>
                     <div class="card-body">
                         @include('layouts.status')

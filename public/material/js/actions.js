@@ -71,7 +71,7 @@ function uncollection(issue_id) {
     });
 }
 
-function readed(issue_id, title_id) {
+function readed(issue_id, title_id, show_next, url) {
     showProgressBar();
     $.ajax({
         type: 'post',
@@ -86,6 +86,19 @@ function readed(issue_id, title_id) {
         success: function (data) {
             $('#btn-readed-' + issue_id).hide();
             $('#btn-unreaded-' + issue_id).show();
+
+            if (show_next != undefined) {
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    success: function (data) {
+                        if(data){
+                            $('#' + show_next).html(data);
+                        }
+                    }
+                });
+            }
+
             hideProgressBar();
         }
     });

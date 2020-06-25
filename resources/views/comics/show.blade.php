@@ -100,6 +100,10 @@
                                         <td><strong>Tamanho:</strong></td>
                                         <td>{{ $issue->size_name }}</td>
                                     </tr>
+                                    <tr>
+                                        <td><strong>Páginas:</strong></td>
+                                        <td>{{ $issue->number_pages }}</td>
+                                    </tr>
                                 </table>
                                 <p></p>
                                 <p>

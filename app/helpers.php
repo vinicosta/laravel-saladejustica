@@ -147,3 +147,50 @@ if (!function_exists('listAuthors')) {
     }
 }
 
+if (!function_exists('showDateInterval')) {
+    function showDateInterval($date_publication, $final_date)
+    {
+        $final_date = new DateTime(date('Y-m-d'));
+        $date_publication = new DateTime($date_publication);
+
+        $diff = $final_date->diff($date_publication);
+
+        $str_diff = '';
+
+        if($diff->y){
+            $str_diff .= "$diff->y ano";
+            if($diff->y > 1){
+                $str_diff .= "s";
+            }
+            if($diff->m and $diff->d){
+                $str_diff .= ",";
+            }
+            elseif($diff->m or $diff->d){
+                $str_diff .= "e";
+            }
+        }
+
+        if($diff->m){
+            $str_diff .= " $diff->m ";
+            if($diff->m > 1){
+                $str_diff .= "meses";
+            }
+            else{
+                $str_diff .= "mês";
+            }
+            if($diff->d){
+                $str_diff .= " e";
+            }
+        }
+
+        if($diff->d){
+            $str_diff .= " $diff->d dia";
+            if($diff->d > 1){
+                $str_diff .= "s";
+            }
+        }
+
+        return $str_diff;
+    }
+}
+

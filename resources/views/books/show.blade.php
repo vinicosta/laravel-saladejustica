@@ -111,6 +111,10 @@
                                         <td><strong>Subgênero:</strong></td>
                                         <td>{{ $issue->subgenre_name }}</td>
                                     </tr>
+                                    <tr>
+                                        <td><strong>Páginas:</strong></td>
+                                        <td>{{ $issue->number_pages }}</td>
+                                    </tr>
                                 </table>
                                 <p></p>
                                 <p>
