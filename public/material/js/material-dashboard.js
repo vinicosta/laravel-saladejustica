@@ -331,7 +331,7 @@ md = {
           bottom: 0,
           left: 0
           },
-        height: '300px'
+        height: '150px'
       }
 
       var dailyReadedsChart = new Chartist.Line('#dailyReadedsChart', dataDailyReadedsChart, optionsDailyReadedsChart);
@@ -361,7 +361,7 @@ md = {
           bottom: 0,
           left: 0
         },
-        height: '300px'
+        height: '150px'
       };
       var responsiveOptions = [
         ['screen and (max-width: 640px)', {

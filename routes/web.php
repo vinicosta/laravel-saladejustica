@@ -60,7 +60,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('title/{type}/{id}', 'TitleController@show');
     Route::get('title/{type}/{id}/delete', 'TitleController@delete');
     Route::get('title/{type}/{id}/edit', 'TitleController@edit');
-    
+
     Route::get('title/{type}/{id}/next', 'IssueController@next');
     Route::get('title/{type}/create/{title_id}', 'IssueController@createFromTitle');
 

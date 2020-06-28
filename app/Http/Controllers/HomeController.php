@@ -39,19 +39,32 @@ class HomeController extends Controller
         );
 
         // Get pages count daily
+        $pages_daily = [];
+
         $start_day = new \DateTime(date('Y-m-d'));
         $interval = new \DateInterval('P6D');
         $start_day->sub($interval);
 
-        $pages_daily = DB::select(
-            "SELECT SUM(iss.number_pages) AS pages_sum, DATE_FORMAT(red.readed_date, '%e/%c') AS readed_date
-            FROM issues iss
-            INNER JOIN readed red ON iss.id = red.issue_id AND red.user_id = ?
-            WHERE red.readed_date BETWEEN ? AND ?
-            GROUP BY red.readed_date
-            ORDER BY red.readed_date",
-            [\Auth::id(), $start_day->format('Y-m-d'), date('Y-m-d')]
-        );
+        for($i = 1; $i <= 7; $i++){
+            $daily = DB::select(
+                "SELECT SUM(iss.number_pages) AS pages_sum, DATE_FORMAT(red.readed_date, '%e/%c') AS readed_date
+                FROM issues iss
+                INNER JOIN readed red ON iss.id = red.issue_id AND red.user_id = ?
+                WHERE red.readed_date = ?
+                GROUP BY red.readed_date
+                ORDER BY red.readed_date",
+                [\Auth::id(), $start_day->format('Y-m-d')]
+            );
+
+            if(!count($daily)){
+                $daily = DB::select("SELECT 0 AS pages_sum, '" . $start_day->format('d/n') . "' AS readed_date");
+            }
+
+            $pages_daily[] = $daily[0];
+
+            $interval = new \DateInterval('P1D');
+            $start_day->add($interval);
+        }
 
         // Get pages count monthly
         $start_day = new \DateTime(date('Y-m-d'));

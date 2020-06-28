@@ -69,6 +69,20 @@
                         <h4 class="card-title">
                             <span style="color: #93a1a1">Páginas lidas por dia</span>
                         </h4>
+                        <table class="table">
+                            <tbody>
+                                @foreach($pages_daily as $pages)
+                                <tr>
+                                    <td style="width: 50px" class="text-center">
+                                        {{ $pages->readed_date }}
+                                    </td>
+                                    <td>
+                                        {{ number_format($pages->pages_sum, 0, ',', '.') }} páginas
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -81,6 +95,20 @@
                         <h4 class="card-title">
                             <span style="color: #93a1a1">Páginas lidas por mês</span>
                         </h4>
+                        <table class="table">
+                            <tbody>
+                                @foreach($pages_monthly as $pages)
+                                <tr>
+                                    <td style="width: 50px" class="text-center">
+                                        {{ $pages->readed_date }}
+                                    </td>
+                                    <td>
+                                        {{ number_format($pages->pages_sum, 0, ',', '.') }} páginas
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -192,7 +220,7 @@
             ]
         };
 
-        md.initDashboardPageCharts(dataDailyReadedsChart, 1000, dataMonthlyReadedsChart, 5000);
+        md.initDashboardPageCharts(dataDailyReadedsChart, 600, dataMonthlyReadedsChart, 5000);
     });
 </script>
 @endpush
