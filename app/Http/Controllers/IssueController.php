@@ -639,11 +639,14 @@ class IssueController extends Controller
             LEFT JOIN publishers pub ON tit.publisher_id = pub.id
             LEFT JOIN collection col ON iss.id = col.issue_id AND col.user_id = ?
             LEFT JOIN readed red ON iss.id = red.issue_id AND red.user_id = ?
+            LEFT JOIN author_issue ais ON iss.id = ais.issue_id
+            LEFT JOIN authors aut on ais.author_id = aut.id
             WHERE tit.type_id = ?
             AND (iss.name LIKE ?
-            OR tit.name LIKE ?)
+            OR tit.name LIKE ?
+            OR aut.name LIKE ?)
             ORDER BY iss.name ASC",
-            [\Auth::id(), \Auth::id(), $type_id, termToSearch($name), termToSearch($name)]
+            [\Auth::id(), \Auth::id(), $type_id, termToSearch($name), termToSearch($name), termToSearch($name)]
         );
 
         return $issues;

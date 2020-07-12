@@ -47,7 +47,7 @@ class HomeController extends Controller
 
         for($i = 1; $i <= 7; $i++){
             $daily = DB::select(
-                "SELECT SUM(iss.number_pages) AS pages_sum, DATE_FORMAT(red.readed_date, '%e/%c') AS readed_date
+                "SELECT SUM(iss.number_pages) AS pages_sum, DATE_FORMAT(red.readed_date, '%d/%m') AS readed_date
                 FROM issues iss
                 INNER JOIN readed red ON iss.id = red.issue_id AND red.user_id = ?
                 WHERE red.readed_date = ?
@@ -57,7 +57,7 @@ class HomeController extends Controller
             );
 
             if(!count($daily)){
-                $daily = DB::select("SELECT 0 AS pages_sum, '" . $start_day->format('d/n') . "' AS readed_date");
+                $daily = DB::select("SELECT 0 AS pages_sum, '" . $start_day->format('d/m') . "' AS readed_date");
             }
 
             $pages_daily[] = $daily[0];
@@ -79,7 +79,7 @@ class HomeController extends Controller
                 WHERE red.readed_date BETWEEN ? AND ?
             ) AS pages_monthly
             GROUP BY readed_date
-            ORDER BY readed_date",
+            ORDER BY readed_date DESC",
             [\Auth::id(), $start_day->format('Y-m-d'), date('Y-m-d')]
         );
 
